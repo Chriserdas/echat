@@ -94,7 +94,7 @@ io.on('connection',socket=>{
             }
             else{
                 
-                handleSignin(key,data);
+                handleSignin(key,data,socket);
             }
             
         });
@@ -133,10 +133,21 @@ function validateUsername(name){
         
 }
 
-function handleSignin(key,name){
+function handleSignin(key,name,socket){
     
     if(key == "signinUsername"){
-        getId(name)
+        if(!getId(name)){
+            socket.emit("username-doesnt-exist",{ message: 
+                "Username doesnt exist"
+            });
+        }
+    }
+    else{
+        if(!getId(name)){
+            if(validateUser(getId(name),name)){
+
+            }
+        }
     }
 }
 
@@ -144,8 +155,32 @@ function getId(name){
     let statement = "SELECT id FROM ids_usernames WHERE username = ?";
 
     connection.query(statement,name,(err,result,fields) =>{
-        return result;
+        
+        if(result.length > 0)
+            return result;
+        
+        else 
+            return false;
+        
     });
 }
+
+function validateUser(userId,password){
+    let statement = "SELECT password FROM ids_passwords WHERE id = ?"
+
+    connection.query(statement, userId, (err,result,fields) =>{
+
+        if(result == password.value)
+            return true;
+
+        else
+            return false;
+
+    });
+
+}
+
+
+
 
 
