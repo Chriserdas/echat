@@ -1,5 +1,6 @@
 {
     "recommendations": [
-        "geardstudios.vscode-discord-rich-presence"
+        "geardstudios.vscode-discord-rich-presence",
+        "zeitnergmbh.auto-git"
     ]
 }
