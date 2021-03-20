@@ -93,7 +93,6 @@ io.on('connection',socket=>{
                 }
             }
             else{
-                
                 handleSignin(key,data,socket);
             }
             
@@ -137,7 +136,7 @@ function handleSignin(key,name,socket){
     
     if(key == "signinUsername"){
         if(!getId(name)){
-            socket.emit("username-doesnt-exist",{ message: 
+            socket.emit("signin-answer",{ message: 
                 "Username doesnt exist"
             });
         }
@@ -145,7 +144,14 @@ function handleSignin(key,name,socket){
     else{
         if(!getId(name)){
             if(validateUser(getId(name),name)){
-
+                socket.emit("signin-answer",{message:
+                    "Welcome"
+                });
+            }
+            else{
+                socket.emit("signin-answer",{message:
+                    "Username and password dont match"
+                });
             }
         }
     }
@@ -174,7 +180,7 @@ function validateUser(userId,password){
             return true;
 
         else
-            return false;
+            return false;      
 
     });
 
