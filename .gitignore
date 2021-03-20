@@ -74,3 +74,6 @@ typings/
 
 # FuseBox cache
 .fusebox/
+.idea/echat.iml
+.idea/modules.xml
+.idea/vcs.xml
