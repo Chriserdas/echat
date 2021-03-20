@@ -1,0 +1,427 @@
+.split-right{
+    background-color: #EDBBB4;
+    width: 55%;
+    height: 100%;
+    position: fixed;
+    z-index: -1;
+    overflow-x: hidden;
+    /*padding-top: 20px;*/
+    right: 0px;
+    /*transition: all 0.6s linear;*/
+}
+
+.shown-signIn{
+    display: block;
+}
+
+/*------------------Sign in Welcome--------------------*/
+
+h2{
+    font-family: 'Oswald', sans-serif;
+    font-size: 35px;
+    color: #EAFDF8;
+    text-align: center;
+    top: 30px;
+}
+
+
+.chat-img img{
+    position: relative;
+    width: 420px;
+    top: 50px;
+    left: 100px;
+    z-index: 1;
+    align-items: center;
+    -webkit-app-region: drag;
+}
+
+/*--------------------------------------------------------*/
+
+
+
+
+.split-left{
+    width: 45%;
+    height: 100%;
+    position: fixed;
+    padding-top: 20px;
+    left: 0px;
+    z-index: -1;
+    text-align: center;
+    /*transition: all 0.6s ease-out;*/
+}
+
+
+h3{
+    line-height: 130px;
+    font-family: 'Oswald', sans-serif;
+    font-size: 35px;
+}
+
+
+.split-left .user-box{
+    position: relative;
+}
+
+
+.user-box input {
+    font-family: 'Oswald', sans-serif;
+    padding: 10px 0;
+    font-size: 16px;
+    color: #050505;
+    margin-bottom: 30px;
+    border: none;
+    border-bottom: 1.2px solid black;
+    outline: none;
+    background: transparent;
+}
+
+
+.user-box label {
+    position: absolute;
+    top:0;
+    left: 170px;
+    padding: 10px 0;
+    font-size: 16px;
+    color: #050505;
+    pointer-events: none;
+    transition: .5s;
+}
+
+
+.user-box input:focus ~ label,
+.user-box input:valid ~ label {
+    font-family: 'Oswald', sans-serif;
+    top: -20px;
+    left: 170px;
+    color: #EDBBB4;
+    font-size: 12px;
+    font-weight: bolder;
+    text-transform: uppercase;
+}
+
+
+/*-----------------------svg icon--------------- */
+
+.eye {
+    width: 1.5em;
+    height: 1.5em;
+}
+  
+
+#watchPass{
+    outline: none;
+    border: none;
+    background-color: transparent;
+}
+
+.eye-slash{
+    width: 1.5em;
+    height: 1.5em;
+}
+
+.signup-eye{
+    width: 1.5em;
+    height: 1.5em;
+    display: none;
+    z-index: 1;
+}
+
+#watchsignupPass{
+    outline: none;
+    border: none;
+    background-color: transparent;
+}
+
+.signup-eye-slash{
+    width: 1.5em;
+    height: 1.5em;
+    display: none;
+    z-index: 1;
+}
+
+.rewrite-eye{
+    width: 1.5em;
+    height: 1.5em;
+    display: none;
+    z-index: 1;
+}
+
+.rewrite-eye-slash{
+    width: 1.5em;
+    height: 1.5em;
+    display: none;
+    z-index: 1;
+}
+
+/*---------------------------------------------------*/
+
+/*-----------------------hide-unhide password----------*/
+.see{
+    position: absolute;
+    top: 312px;
+    left: 330px;
+    display: none;
+}
+
+.hide{
+    position: absolute;
+    top: 312px;
+    left: 330px;
+    display: none;
+}
+
+button :hover{
+    cursor: pointer;
+    transform: scale(0.95);
+}
+
+#watchPass :active{
+    transform: scale(0.95);
+}
+
+
+.see-s-pass{
+    position: relative;
+    top: -257px;
+    right: -96px;
+}
+
+#watchsignupPass :active{
+    transform: scale(0.95);
+}
+
+.hide-s-pass{
+    position: relative;
+    top: -257px;
+    right: -96px;
+    display: block;
+}
+
+.see-rewrite-pass{
+    position: relative;
+    top: -245px;
+    right: -96px;
+}
+
+.hide-rewrite-pass{
+    position: relative;
+    top: -245px;
+    right: -96px;
+}
+/*---------------------------------------------------------*/
+
+/*-------------submit button/forgot password--------------*/
+
+.sign-in-button{
+    position: relative;
+    left: -75px;
+    padding: 10px;
+    top: 50px;
+    font-family: 'Oswald', sans-serif;
+    border-radius: 40px;
+    font-size: 18px;
+    font-weight: bold;
+    border: 3px solid #EDBBB4;
+    outline: none;
+    background-color: transparent;
+    color: #EDBBB4;
+}
+
+.forgotPass{
+    position: relative;
+    left: 45px;
+    outline: none;
+    top: -15px;
+    color: dimgrey;
+    font-size: 16px;
+    text-decoration: none;
+    
+}
+
+.or{
+    position: relative;
+    top: 60px;
+    font-family: 'Oswald', sans-serif;
+    color: dimgrey;
+}
+
+.go-toSignUp{
+    position: relative;
+    top: 65px;
+    outline: none;
+    font-family: 'Oswald', sans-serif;
+    text-decoration-color: #CC2936;
+    color: #CC2936;
+}
+
+
+.SignInContainer{
+    display: block;
+}
+
+/*--------------------------------------------------------*/
+
+/*---------------after signup button-----------------*/
+
+
+.ghost-for-signup{
+    align-items: center;
+    display: none;
+}
+
+.createAcc{
+    position: relative;
+    top: 30px;
+    font-size: 25px;
+    color: white;
+    font-family: 'Oswald', sans-serif;
+}
+
+.moreonCreateAcc{
+    position: relative;
+    top: 35px;
+    font-size: 25px;
+    color: white;
+    font-family: 'Oswald', sans-serif;
+}
+
+
+.ghost-for-signup img{
+    position: relative;
+    width: 400px;
+    top: 100px;
+    z-index: 1;
+    align-items: center;
+    -webkit-app-region: drag;
+}
+
+
+/*---------------------------------------------------------*/
+
+/*-------------------Sign up panel-------------------------*/
+
+.signupPanel{
+    width: 45%;
+    height: 100%;
+    position: fixed;
+    z-index: -1;
+    overflow-x: hidden;
+    padding-top: 20px;
+    right: 0px;
+    /*transition: all 0.6s linear;*/
+    display: none;
+}
+
+.signupContainer{
+    position: relative;
+    text-align: center;
+    top: 50px;
+    font-family: 'Oswald', sans-serif;
+    font-size: 35px;
+    
+}
+
+.signupPanel form{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 0 50px;
+    height: 100%;
+    text-align: center;
+}
+
+.user-signup input{
+    background-color: #eee;
+    border:transparent;
+    padding: 10px 15px;
+    margin: 8px 0;
+    font-size: 16px;
+    outline: none;
+    transition: all 0.1s linear;
+    z-index: -1;
+}
+
+.signUp-or{
+    position: relative;
+    top: 20px;
+    font-size: 16px;
+    font-family: 'Oswald', sans-serif;
+    color: dimgrey;
+}
+
+.go-toSignIn{
+    position: relative;
+    outline: none;
+    border: none;
+    background-color: white;
+    top: 5px;
+    font-family: 'Oswald', sans-serif;
+    font-size: 17px;
+    text-decoration: underline;
+    text-decoration-color: #EDBBB4;
+    color: #EDBBB4;
+}
+
+.sign-up-button{
+    position: relative;
+    padding: 10px;
+    top: 5px;
+    text-align: center;
+    font-family: 'Oswald', sans-serif;
+    border-radius: 40px;
+    font-size: 18px;
+    font-weight: bold;
+    border: 3px solid #CC2936;
+    outline: none;
+    background-color: transparent;
+    color: #CC2936;
+}
+
+/*--------------------------------------------------------*/
+
+/*-------------------conditions to signup----------------*/
+
+.popup{
+    position:absolute;
+    font-size: 15px;
+    display: none;
+    top: 25px;
+    left: 170px;
+    border: solid transparent;
+    padding: 8px;
+    border-radius: 36px;
+    background-color: #CC2936;
+    color: white;
+    transition: all ease-in-out;
+    animation: notification 1.3s;
+    opacity: 0;
+
+}
+
+@keyframes notification{
+    0% {top: 0px; opacity: 1;}
+    60%{top: 25px;}
+    80%{opacity: 1;}
+    85%{opacity: 0;}
+    100%{top:0px; opacity: 0;}
+}
+
+#invalid-email{
+    left:190px;
+}
+
+#noFilled{
+    left:180px
+}
+
+
+/*------------------------------------------------------*/
+
+
+
+
+
+
+

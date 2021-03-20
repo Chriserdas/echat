@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <link rel="stylesheet" href = "css/titleBar.css">
+        <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@600&family=Public+Sans:wght@900&family=Raleway:wght@700&display=swap" rel="stylesheet">       
+        <link rel = "stylesheet" href = "css/register.css" 
+    </head>
+    <body>
+
+        <div id="title-bar">
+            
+            
+            <div id="title-bar-btns">
+                 
+                <button id="min-btn">-</button>
+
+                <div id = "close-button">
+                    <button id="close-btn">&times</button>
+
+                </div>
+            </div>           
+       </div>
+
+        <div class="split-right" id="split-right">
+            <div class="shown-signIn">
+                <div class="chat-img"> 
+                    <h2> Welcome to e-chat</h2>
+                    <img src="img/undraw_online_messaging_9ro6.svg"> 
+                </div>
+            </div>
+        </div>    
+          
+
+        <div class="signupPanel">
+            <div class="signupContainer">
+                <div class="SignUp">
+                    Sign Up
+                </div>
+
+                <form>
+                    
+                    <div class="user-signup">
+
+                        <input type="text" placeholder="Username" maxlength="20" id="signupUsername">
+                        <input type="email" placeholder="Email" id="email">
+                        <input type="password" placeholder="Password" maxlength="20" id="signup-pass">
+                        <input type="password" placeholder="Rewrite password" maxlength="20" id="rewritepass"><br>
+
+                        
+
+                        <button class = "sign-up-button">SIGN UP</button>
+
+                        <div class="signUp-or">or</div>
+                        <button class="go-toSignIn">Sign in</button>
+                        
+                    </div>
+                </form>
+
+                <div class="hideSignupPass">
+                    <button class="signupHide" id="watchsignupPass">
+
+                        <div class="see-s-pass" id="signup-eye">
+                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="signup-eye" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.134 13.134 0 0 0 1.66 2.043C4.12 11.332 5.88 12.5 8 12.5c2.12 0 3.879-1.168 5.168-2.457A13.134 13.134 0 0 0 14.828 8a13.133 13.133 0 0 0-1.66-2.043C11.879 4.668 10.119 3.5 8 3.5c-2.12 0-3.879 1.168-5.168 2.457A13.133 13.133 0 0 0 1.172 8z"/>
+                                <path fill-rule="evenodd" d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
+                            </svg>
+                        </div>
+
+                        <div class="hide-s-pass" id="signup-eye-slash">
+                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="signup-eye-slash"  fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M13.359 11.238C15.06 9.72 16 8 16 8s-3-5.5-8-5.5a7.028 7.028 0 0 0-2.79.588l.77.771A5.944 5.944 0 0 1 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.134 13.134 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755-.165.165-.337.328-.517.486l.708.709z"/>
+                                <path d="M11.297 9.176a3.5 3.5 0 0 0-4.474-4.474l.823.823a2.5 2.5 0 0 1 2.829 2.829l.822.822zm-2.943 1.299l.822.822a3.5 3.5 0 0 1-4.474-4.474l.823.823a2.5 2.5 0 0 0 2.829 2.829z"/>
+                                <path d="M3.35 5.47c-.18.16-.353.322-.518.487A13.134 13.134 0 0 0 1.172 8l.195.288c.335.48.83 1.12 1.465 1.755C4.121 11.332 5.881 12.5 8 12.5c.716 0 1.39-.133 2.02-.36l.77.772A7.029 7.029 0 0 1 8 13.5C3 13.5 0 8 0 8s.939-1.721 2.641-3.238l.708.709z"/>
+                                <path fill-rule="evenodd" d="M13.646 14.354l-12-12 .708-.708 12 12-.708.708z"/>
+                            </svg>
+                        </div>
+                    </button>
+                </div>
+
+                <div class="hideRewritePass">
+                    <button class="rewriteHide" id="watchsignupPass">
+
+                        <div class="see-rewrite-pass" id="rewrite-eye">
+                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="rewrite-eye" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.134 13.134 0 0 0 1.66 2.043C4.12 11.332 5.88 12.5 8 12.5c2.12 0 3.879-1.168 5.168-2.457A13.134 13.134 0 0 0 14.828 8a13.133 13.133 0 0 0-1.66-2.043C11.879 4.668 10.119 3.5 8 3.5c-2.12 0-3.879 1.168-5.168 2.457A13.133 13.133 0 0 0 1.172 8z"/>
+                                <path fill-rule="evenodd" d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
+                            </svg>
+                        </div>
+
+                        <div class="hide-rewrite-pass" id="rewrite-eye-slash">
+                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="rewrite-eye-slash"  fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M13.359 11.238C15.06 9.72 16 8 16 8s-3-5.5-8-5.5a7.028 7.028 0 0 0-2.79.588l.77.771A5.944 5.944 0 0 1 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.134 13.134 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755-.165.165-.337.328-.517.486l.708.709z"/>
+                                <path d="M11.297 9.176a3.5 3.5 0 0 0-4.474-4.474l.823.823a2.5 2.5 0 0 1 2.829 2.829l.822.822zm-2.943 1.299l.822.822a3.5 3.5 0 0 1-4.474-4.474l.823.823a2.5 2.5 0 0 0 2.829 2.829z"/>
+                                <path d="M3.35 5.47c-.18.16-.353.322-.518.487A13.134 13.134 0 0 0 1.172 8l.195.288c.335.48.83 1.12 1.465 1.755C4.121 11.332 5.881 12.5 8 12.5c.716 0 1.39-.133 2.02-.36l.77.772A7.029 7.029 0 0 1 8 13.5C3 13.5 0 8 0 8s.939-1.721 2.641-3.238l.708.709z"/>
+                                <path fill-rule="evenodd" d="M13.646 14.354l-12-12 .708-.708 12 12-.708.708z"/>
+                            </svg>
+                        </div>
+                    </button>
+                </div>
+            </div>
+
+
+              
+            <div class="popup" id="noFilled">Fill this field first!</div>
+
+            <div class="popup" id="passwords-dont-match">Passwords dont match</div>
+
+            <div class="popup" id="invalid-email">Invalid email!</div>
+
+            <div class="popup" id="smallPass">Try a bigger password!</div>
+
+            
+        </div>
+        
+
+        <div class ="split-left">
+
+            <div class="SignInContainer">
+
+                <div class="SignIn">
+                
+                    <h3>Sign In</h3> 
+                
+                </div>
+
+                <form action="test.html">
+                    
+                    <div class="user-box">
+
+                        <input type="text" name="" required ="" maxlength="20" id="username"> 
+                        <label>Username</label>
+
+                        <div class="user-box">
+                            <input type="password" name="" required="" id="pass" maxlength="20">
+                            <label>Password</label>
+                        </div>
+
+                        <a href="#" class="forgotPass">Forgot your password?</a>
+
+                        <button class = "sign-in-button">SIGN IN</button>
+
+                        <div class="or">or</div>
+                        <a href="#" class="go-toSignUp">Sign up</a>
+                        
+                    </div>
+                </form>
+
+                <div class="hidePass">
+                    <button id="watchPass">
+
+                        <div class="see" id="eye">
+                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="eye" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.134 13.134 0 0 0 1.66 2.043C4.12 11.332 5.88 12.5 8 12.5c2.12 0 3.879-1.168 5.168-2.457A13.134 13.134 0 0 0 14.828 8a13.133 13.133 0 0 0-1.66-2.043C11.879 4.668 10.119 3.5 8 3.5c-2.12 0-3.879 1.168-5.168 2.457A13.133 13.133 0 0 0 1.172 8z"/>
+                                <path fill-rule="evenodd" d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
+                            </svg>
+                        </div>
+
+                        <div class="hide" id="eye-slash">
+                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="eye-slash"  fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M13.359 11.238C15.06 9.72 16 8 16 8s-3-5.5-8-5.5a7.028 7.028 0 0 0-2.79.588l.77.771A5.944 5.944 0 0 1 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.134 13.134 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755-.165.165-.337.328-.517.486l.708.709z"/>
+                                <path d="M11.297 9.176a3.5 3.5 0 0 0-4.474-4.474l.823.823a2.5 2.5 0 0 1 2.829 2.829l.822.822zm-2.943 1.299l.822.822a3.5 3.5 0 0 1-4.474-4.474l.823.823a2.5 2.5 0 0 0 2.829 2.829z"/>
+                                <path d="M3.35 5.47c-.18.16-.353.322-.518.487A13.134 13.134 0 0 0 1.172 8l.195.288c.335.48.83 1.12 1.465 1.755C4.121 11.332 5.881 12.5 8 12.5c.716 0 1.39-.133 2.02-.36l.77.772A7.029 7.029 0 0 1 8 13.5C3 13.5 0 8 0 8s.939-1.721 2.641-3.238l.708.709z"/>
+                                <path fill-rule="evenodd" d="M13.646 14.354l-12-12 .708-.708 12 12-.708.708z"/>
+                            </svg>
+                        </div>
+                    </button>
+                </div>
+
+            </div>
+
+            <div class="ghost-for-signup">
+                <div class="createAcc">
+                    Create an account <br>
+                    and
+                </div>
+                <div class="moreonCreateAcc">
+                    join the e-chat community
+                </div>
+            
+                <img src="img/undraw_personal_email_t7nw.svg"> 
+
+            </div>
+
+        </div>
+        
+        <script src="http://localhost:3000/socket.io/socket.io.js"></script>
+        <script src="js/main.js"></script>
+       <script src = "js/buttons.js"></script>
+    </body>
+
+</html>
+

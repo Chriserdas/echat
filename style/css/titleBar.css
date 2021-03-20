@@ -1,0 +1,56 @@
+@font-face{
+    font-family: 'Epilogue_light';
+    src: url('Fonts/Epilogue-Light.ttf');
+}
+
+body {
+    padding: 0%;
+    margin: 0px; 
+    -webkit-app-region: drag;
+    -webkit-user-select: none;
+    /*background-color: #495057;*/
+}
+   
+#title-bar-btns {
+    -webkit-app-region: no-drag;
+    position: fixed;
+    top: 0px;
+    right: 45px;
+}
+
+
+#close-button{
+    -webkit-app-region: no-drag;
+    position: fixed;
+    top: 0px;
+    right: 0px;
+}
+
+
+
+#min-btn, #close-btn{
+    border: none;
+    color: black;
+    outline: none;
+    font-size: 30px;
+    display: inline-block;
+    padding: 3px 14px;
+    background-color: white;
+    font-weight: lighter;
+    -webkit-user-select: none;
+}
+
+
+
+#title-bar-btns :hover{
+    background-color: #f5e6e4;
+}
+
+#close-button :hover{
+    background-color: crimson ;
+}
+
+
+
+
+
