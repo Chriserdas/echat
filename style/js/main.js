@@ -22,6 +22,7 @@ var secondWordInSignup = document.querySelector(".moreonCreateAcc");
 var signinUsername = document.querySelector("#username");
 var signinPassword = document.querySelector("#pass");
 
+let signinNotification = document.querySelector("#signinProblem");
 
 signupButton.addEventListener('click', e=>{
     e.preventDefault();
@@ -94,6 +95,23 @@ signupButton.addEventListener('click', e=>{
 signinButton.addEventListener('click',e=>{
     e.preventDefault();
     socket = io.connect('http://localhost:3000');
+
+    if(username.value == ""){
+        signinNotification.style.display = "block";
+        username.focus();
+        username.style.borderBottom = "1.2px solid red";
+        passText.style.borderBottom = "1.2px solid black";
+        animate(signinNotification);
+
+    }
+    else if(passText.value == ""){
+        signinNotification.style.display = "block";
+        passText.focus();
+        username.style.borderBottom = "1.2px solid black";
+        passText.style.borderBottom = "1.2px solid red";
+        animate(signinNotification);
+
+    }
     emitSigninData();
 });
 
