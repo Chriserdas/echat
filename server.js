@@ -150,7 +150,7 @@ function handleSignin(key,name,socket){
             }
             else{
                 socket.emit("signin-answer",{message:
-                    "Username and password dont match"
+                    "username and password dont match"
                 });
             }
         }

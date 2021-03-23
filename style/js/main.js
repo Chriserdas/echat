@@ -94,7 +94,9 @@ signupButton.addEventListener('click', e=>{
 
 signinButton.addEventListener('click',e=>{
     e.preventDefault();
-    socket = io.connect('http://localhost:3000');
+    signinNotification.innerHTML = "Fill this field first";
+    signinNotification.style.left = "185px";
+    signinNotification.style.display = "none";
 
     if(username.value == ""){
         signinNotification.style.display = "block";
@@ -112,7 +114,19 @@ signinButton.addEventListener('click',e=>{
         animate(signinNotification);
 
     }
-    emitSigninData();
+    else if(passText.value.length <=3){
+        signinNotification.style.display = "block";
+        signinNotification.innerHTML = "Password too small";
+        username.style.borderBottom = "1.2px solid black";
+        passText.style.borderBottom = "1.2px solid red";
+        animate(signinNotification);
+    }
+    else{
+        socket = io.connect('http://localhost:3000');
+        emitSigninData();
+        serverOpinion();
+    }
+    
 });
 
 
@@ -193,5 +207,17 @@ function emitData(){
 function emitSigninData(){
     socket.emit("signinUsername", signinUsername.value);
     socket.emit("signinPassword", signinPassword.value);
+}
+
+function serverOpinion(){
+    socket.on("signin-answer",answer=>{
+        if(answer.message != "Welcome"){
+            signinNotification.style.display = "block";
+            signinNotification.innerHTML = answer.message;
+            signinNotification.style.left = "130px";
+            animate(signinNotification);
+        }
+    });
+    
 }
 
