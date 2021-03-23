@@ -108,7 +108,7 @@ function frameButtons(){
     signin("focusin","focusout");
     goToSignupButton.addEventListener("click",goToSignup);
     
-    
+
     signup("mouseenter","mouseleave");
     signup("focusin","focusout");
 
@@ -162,15 +162,6 @@ function hidePassword(par,chooseye,chooseSlashEye){
     chooseSlashEye.style.display = "block";
 }
 
-/*function hoverOverPass(chooseye,chooseSlashEye){
-    chooseye.style.display = "block";
-    chooseSlashEye.style.display = "none";
-}
-
-/*function unHoverOverPass(chooseye,chooseSlashEye){
-    chooseye.style.display = "none";
-    chooseSlashEye.style.display = "block";
-}*/
 
 function signup(access,out){
     signupButton.addEventListener(access,()=>{
