@@ -104,94 +104,13 @@ function frameButtons(){
         }
     });
 
-
-    /*rightPanel.addEventListener('mouseenter',function _func(){
-
-        rightPanel.style.background = "#CC2936";
-        welcomePanel.style.display ="none";
-        firstGhostPanel.style.display = "block"
-        
-    });
-
-
-    rightPanel.addEventListener('mouseleave',() =>{
-        rightPanel.style.background = "#EDBBB4";
-        welcomePanel.style.display ="block";
-        firstGhostPanel.style.display = "none"
-        
-    });
-
-
-    ghostButtonSignUp.addEventListener('mouseenter',() =>{
-        ghostButtonSignUp.style.cursor = "pointer"; 
-        ghostButtonSignUp.style.boxShadow = "0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19)";
-    });
-
-
-    ghostButtonSignUp.addEventListener("mouseleave", () =>{
-        ghostButtonSignUp.style.boxShadow = "0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19)";
-    });*/
-
-    forgotPass.addEventListener('mouseenter',()=>{
-        forgotPass.style.color = "black";
-    });
-
-    forgotPass.addEventListener('mouseout',()=>{
-        forgotPass.style.color = "dimgrey";
-        console.log("sadasd");
-    });
-
-    signInButton.addEventListener("mouseenter",() =>{
-        signInButton.style.backgroundColor = "#EDBBB4";
-        signInButton.style.color = "white";
-        signInButton.style.cursor = "pointer";
-
-    });
-
-
-    signInButton.addEventListener("mouseleave",() =>{
-        signInButton.style.backgroundColor = "white";
-        signInButton.style.color = "#EDBBB4";
-    });
-    
-
-    goToSignupButton.addEventListener("mouseenter",() =>{
-        goToSignupButton.style.textDecoration = "none";
-    });
-
-
-    goToSignupButton.addEventListener("mouseleave",() =>{
-        goToSignupButton.style.textDecoration = "underline";
-    });
-
-
+    signin("mouseenter","mouseleave");
+    signin("focusin","focusout");
     goToSignupButton.addEventListener("click",goToSignup);
-    //ghostButtonSignUp.addEventListener("click",goToSignup);
-
-
-    signupButton.addEventListener("mouseenter",()=>{
-        signupButton.style.backgroundColor = "#CC2936";
-        signupButton.style.color = "white";
-        signupButton.style.cursor = "pointer";
-    });
-
-    signupButton.addEventListener("mouseleave",() =>{
-        signupButton.style.backgroundColor = "white";
-        signupButton.style.color = "#CC2936";
-    });
-
-
-    goToSigninButton.addEventListener("mouseenter",() =>{
-        goToSigninButton.style.textDecoration = "none";
-        goToSigninButton.style.cursor = "pointer";
-    });
-
-
-    goToSigninButton.addEventListener("mouseleave",() =>{
-        goToSigninButton.style.textDecoration = "underline";
-    });
-
-    focusEvents();
+    
+    
+    signup("mouseenter","mouseleave");
+    signup("focusin","focusout");
 
     goToSigninButton.addEventListener('click',goToSignin);
 
@@ -253,27 +172,61 @@ function hidePassword(par,chooseye,chooseSlashEye){
     chooseSlashEye.style.display = "block";
 }*/
 
-function focusEvents(){
-    signupButton.addEventListener("focusin",()=>{
+function signup(access,out){
+    signupButton.addEventListener(access,()=>{
         signupButton.style.backgroundColor = "#CC2936";
         signupButton.style.color = "white";
         signupButton.style.cursor = "pointer";
     });
 
-    signupButton.addEventListener("focusout",() =>{
+    signupButton.addEventListener(out,() =>{
         signupButton.style.backgroundColor = "white";
         signupButton.style.color = "#CC2936";
     });
 
 
-    goToSigninButton.addEventListener("focusin",() =>{
+    goToSigninButton.addEventListener(access,() =>{
         goToSigninButton.style.textDecoration = "none";
         goToSigninButton.style.cursor = "pointer";
     });
 
 
-    goToSigninButton.addEventListener("focusout",() =>{
+    goToSigninButton.addEventListener(out,() =>{
         goToSigninButton.style.textDecoration = "underline";
+    });
+}
+
+function signin(access,out){
+    forgotPass.addEventListener(access,()=>{
+        forgotPass.style.color = "black";
+    });
+
+    forgotPass.addEventListener(out,()=>{
+        forgotPass.style.color = "dimgrey";
+        console.log("sadasd");
+    });
+
+    signInButton.addEventListener(access,() =>{
+        signInButton.style.backgroundColor = "#EDBBB4";
+        signInButton.style.color = "white";
+        signInButton.style.cursor = "pointer";
+
+    });
+
+
+    signInButton.addEventListener(out,() =>{
+        signInButton.style.backgroundColor = "white";
+        signInButton.style.color = "#EDBBB4";
+    });
+    
+
+    goToSignupButton.addEventListener(access,() =>{
+        goToSignupButton.style.textDecoration = "none";
+    });
+
+
+    goToSignupButton.addEventListener(out,() =>{
+        goToSignupButton.style.textDecoration = "underline";
     });
 }
 
