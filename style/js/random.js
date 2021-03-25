@@ -1,3 +1,4 @@
+
 const { request } = require("https");
 
 const electron = require('electron');
@@ -8,6 +9,7 @@ const path = require('path');
 const{app ,BrowserWindow} = electron;
 
 let mainWindow;
+let appWindow;
 
 app.on('ready', function(){
 
@@ -15,10 +17,10 @@ app.on('ready', function(){
         titleBarStyle: 'customButtonsOnHover', 
         frame: false, 
         width: 1100 , 
-        
+
         webPreferences:{ 
             enableRemoteModule: true ,
-             nodeIntegration: true
+            nodeIntegration: true
         }, 
         resizable:false
     });
@@ -29,7 +31,15 @@ app.on('ready', function(){
         slashes:true
     }));
    
-      
+    /*if(mainModule.proceed){
+        appWindow = new BrowserWindow({});
+
+        appWindow.loadURL(url.format({
+            pathname: path.join(__dirname,"..",'main.html'),
+            protocol: 'file:',
+            slashes: true
+        }));
+    }*/
 
 });
 

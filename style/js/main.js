@@ -24,6 +24,8 @@ let signinPassword = document.querySelector("#pass");
 
 let signinNotification = document.querySelector("#signinProblem");
 
+let proceedToApp = false;
+
 signupButton.addEventListener('click', e=>{
     e.preventDefault();
 
@@ -218,9 +220,10 @@ function serverOpinion(){
             animate(signinNotification);
         }
         else{
-
+            proceedToApp = true;
         }
     });
     
 }
+
 
