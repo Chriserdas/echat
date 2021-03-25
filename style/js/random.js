@@ -11,7 +11,17 @@ let mainWindow;
 
 app.on('ready', function(){
 
-    mainWindow = new BrowserWindow({ titleBarStyle: 'customButtonsOnHover', frame: false, width: 1100 , webPreferences:{ enableRemoteModule: true , nodeIntegration: true}, resizable:false});
+    mainWindow = new BrowserWindow({ 
+        titleBarStyle: 'customButtonsOnHover', 
+        frame: false, 
+        width: 1100 , 
+        
+        webPreferences:{ 
+            enableRemoteModule: true ,
+             nodeIntegration: true
+        }, 
+        resizable:false
+    });
     
     mainWindow.loadURL(url.format({
         pathname: path.join(__dirname,"..", 'index.html'),

@@ -4,9 +4,9 @@ const http = require('http')
 const socketio = require('socket.io');
 
 
-var isAlreadyUsed = false;
-var counter = 0;
-var sql = require('mysql');
+let isAlreadyUsed = false;
+let counter = 0;
+let sql = require('mysql');
 let configure = require("./config.js");
 const { stat } = require('fs');
 
@@ -30,7 +30,7 @@ server.listen(PORT,()=>{
 
 //Connect with sql db
 
-var connection = sql.createConnection(configure);
+let connection = sql.createConnection(configure);
 
 
 connection.connect(function(err) {

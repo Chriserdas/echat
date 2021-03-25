@@ -1,50 +1,50 @@
 const BrowserWindow = require('electron').remote;
 
-var rightPanel = document.querySelector(".split-right");
-var leftPanel = document.querySelector(".split-left");
+let rightPanel = document.querySelector(".split-right");
+let leftPanel = document.querySelector(".split-left");
 
-var firstGhostPanel = document.querySelector(".ghost-Signup");
-var welcomePanel = document.querySelector(".shown-signIn");
+let firstGhostPanel = document.querySelector(".ghost-Signup");
+let welcomePanel = document.querySelector(".shown-signIn");
 
-var signinCont = document.querySelector(".SignInContainer");
-var ghostForSignup = document.querySelector(".ghost-for-signup");
+let signinCont = document.querySelector(".SignInContainer");
+let ghostForSignup = document.querySelector(".ghost-for-signup");
 
-var signupEye = document.querySelector(".signupHide");
-var rewriteEye = document.querySelector(".rewriteHide");
+let signupEye = document.querySelector(".signupHide");
+let rewriteEye = document.querySelector(".rewriteHide");
 const watchPassButton = document.querySelector("#watchPass");
 
-var eyeIcon = document.getElementById("eye");
-var eyeSlashIcon = document.getElementById("eye-slash");
+let eyeIcon = document.getElementById("eye");
+let eyeSlashIcon = document.getElementById("eye-slash");
 
-var eyeIcon2 = document.querySelector(".signup-eye");
-var eyeSlashIcon2 = document.querySelector(".signup-eye-slash");
+let eyeIcon2 = document.querySelector(".signup-eye");
+let eyeSlashIcon2 = document.querySelector(".signup-eye-slash");
 
-var eyeIcon3 = document.querySelector(".rewrite-eye");
-var eyeSlashIcon3 = document.querySelector(".rewrite-eye-slash");
+let eyeIcon3 = document.querySelector(".rewrite-eye");
+let eyeSlashIcon3 = document.querySelector(".rewrite-eye-slash");
 
-var username = document.querySelector("#username");
-var passText = document.querySelector("#pass");
-var signupPassText = document.querySelector("#signup-pass");
-var rewritePassText = document.querySelector("#rewritepass");
+let username = document.querySelector("#username");
+let passText = document.querySelector("#pass");
+let signupPassText = document.querySelector("#signup-pass");
+let rewritePassText = document.querySelector("#rewritepass");
 
-var ghostButtonSignUp = document.querySelector(".ghost-Button");
+let ghostButtonSignUp = document.querySelector(".ghost-Button");
 
-var signInButton = document.querySelector(".sign-in-button");
-var goToSignupButton = document.querySelector(".go-toSignUp");
+let signInButton = document.querySelector(".sign-in-button");
+let goToSignupButton = document.querySelector(".go-toSignUp");
 
-var signupButton = document.querySelector(".sign-up-button");
-var goToSigninButton = document.querySelector(".go-toSignIn");
+let signupButton = document.querySelector(".sign-up-button");
+let goToSigninButton = document.querySelector(".go-toSignIn");
 
-var signupPanel = document.querySelector(".signupPanel");
+let signupPanel = document.querySelector(".signupPanel");
 
-var signUpUsername = document.querySelector("#signupUsername");
-var email = document.querySelector("#email");
+let signUpUsername = document.querySelector("#signupUsername");
+let email = document.querySelector("#email");
 
-var forgotPass = document.querySelector(".forgotPass");
+let forgotPass = document.querySelector(".forgotPass");
 
 function frameButtons(){
 
-    var eyeButtonsMap = new Map();
+    let eyeButtonsMap = new Map();
     eyeButtonsMap.set(watchPassButton,[passText,eyeIcon,eyeSlashIcon]);
     eyeButtonsMap.set(signupEye,[signupPassText,eyeIcon2,eyeSlashIcon2]);
     eyeButtonsMap.set(rewriteEye,[rewritePassText,eyeIcon3,eyeSlashIcon3]);

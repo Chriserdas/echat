@@ -1,26 +1,26 @@
-var socket;
+let socket;
 
-var signUpUsername = document.querySelector("#signupUsername");
-var signupPassword = document.querySelector("#signup-pass");
-var rewritePass = document.querySelector("#rewritepass");
-var email = document.querySelector("#email");
+let signUpUsername = document.querySelector("#signupUsername");
+let signupPassword = document.querySelector("#signup-pass");
+let rewritePass = document.querySelector("#rewritepass");
+let email = document.querySelector("#email");
 
-var signupButton = document.querySelector(".sign-up-button");
-var signinButton = document.querySelector(".sign-in-button");
-
-
-var field = document.querySelector("#noFilled");
-var passDontMatch = document.querySelector("#passwords-dont-match");
-var invalidEmail = document.querySelector("#invalid-email");
-var insufficientLength = document.querySelector("#smallPass");
+let signupButton = document.querySelector(".sign-up-button");
+let signinButton = document.querySelector(".sign-in-button");
 
 
-var firstWordInSignup = document.querySelector(".createAcc");
-var secondWordInSignup = document.querySelector(".moreonCreateAcc");
+let field = document.querySelector("#noFilled");
+let passDontMatch = document.querySelector("#passwords-dont-match");
+let invalidEmail = document.querySelector("#invalid-email");
+let insufficientLength = document.querySelector("#smallPass");
 
 
-var signinUsername = document.querySelector("#username");
-var signinPassword = document.querySelector("#pass");
+let firstWordInSignup = document.querySelector(".createAcc");
+let secondWordInSignup = document.querySelector(".moreonCreateAcc");
+
+
+let signinUsername = document.querySelector("#username");
+let signinPassword = document.querySelector("#pass");
 
 let signinNotification = document.querySelector("#signinProblem");
 
@@ -216,6 +216,9 @@ function serverOpinion(){
             signinNotification.innerHTML = answer.message;
             signinNotification.style.left = "130px";
             animate(signinNotification);
+        }
+        else{
+
         }
     });
     
