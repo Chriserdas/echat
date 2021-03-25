@@ -1,26 +1,26 @@
-let socket;
+var socket;
 
-let signUpUsername = document.querySelector("#signupUsername");
-let signupPassword = document.querySelector("#signup-pass");
-let rewritePass = document.querySelector("#rewritepass");
-let email = document.querySelector("#email");
+var signUpUsername = document.querySelector("#signupUsername");
+var signupPassword = document.querySelector("#signup-pass");
+var rewritePass = document.querySelector("#rewritepass");
+var email = document.querySelector("#email");
 
-let signupButton = document.querySelector(".sign-up-button");
-let signinButton = document.querySelector(".sign-in-button");
-
-
-let field = document.querySelector("#noFilled");
-let passDontMatch = document.querySelector("#passwords-dont-match");
-let invalidEmail = document.querySelector("#invalid-email");
-let insufficientLength = document.querySelector("#smallPass");
+var signupButton = document.querySelector(".sign-up-button");
+var signinButton = document.querySelector(".sign-in-button");
 
 
-let firstWordInSignup = document.querySelector(".createAcc");
-let secondWordInSignup = document.querySelector(".moreonCreateAcc");
+var field = document.querySelector("#noFilled");
+var passDontMatch = document.querySelector("#passwords-dont-match");
+var invalidEmail = document.querySelector("#invalid-email");
+var insufficientLength = document.querySelector("#smallPass");
 
 
-let signinUsername = document.querySelector("#username");
-let signinPassword = document.querySelector("#pass");
+var firstWordInSignup = document.querySelector(".createAcc");
+var secondWordInSignup = document.querySelector(".moreonCreateAcc");
+
+
+var signinUsername = document.querySelector("#username");
+var signinPassword = document.querySelector("#pass");
 
 let signinNotification = document.querySelector("#signinProblem");
 
