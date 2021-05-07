@@ -5,11 +5,15 @@ const electron = require('electron');
 const url = require('url');
 const path = require('path');
 
-
+let username;
 const{app ,BrowserWindow} = electron;
+let AppWindow = electron.BrowserWindow;
+
+const ipcMain = electron.ipcMain;
+
 
 let mainWindow;
-let appWindow;
+
 
 app.on('ready', function(){
 
@@ -20,6 +24,7 @@ app.on('ready', function(){
 
         webPreferences:{ 
             enableRemoteModule: true ,
+            webSecurity:false,
             nodeIntegration: true
         }, 
         resizable:false
@@ -30,16 +35,15 @@ app.on('ready', function(){
         protocol: 'file:',
         slashes:true
     }));
-   
-    /*if(mainModule.proceed){
-        appWindow = new BrowserWindow({});
 
-        appWindow.loadURL(url.format({
-            pathname: path.join(__dirname,"..",'main.html'),
-            protocol: 'file:',
-            slashes: true
-        }));
-    }*/
+    
+    ipcMain.on('get-username',(event,arg)=>{
+        username = arg;
+    });
+
+    ipcMain.on("request-username",(event,arg)=>{
+        event.sender.send("username",username);
+    })
 
 });
 

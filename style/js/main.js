@@ -1,5 +1,16 @@
 var socket;
 
+const electron = require('electron');
+const path = require('path');
+const url = require('url');
+
+const ipc = electron.ipcRenderer;
+
+
+let AppWindow = electron.remote.BrowserWindow;  
+let currentWindow = AppWindow.getFocusedWindow();
+
+
 var signUpUsername = document.querySelector("#signupUsername");
 var signupPassword = document.querySelector("#signup-pass");
 var rewritePass = document.querySelector("#rewritepass");
@@ -23,6 +34,7 @@ var signinUsername = document.querySelector("#username");
 var signinPassword = document.querySelector("#pass");
 
 let signinNotification = document.querySelector("#signinProblem");
+
 
 let proceedToApp = false;
 
@@ -132,9 +144,6 @@ signinButton.addEventListener('click',e=>{
 });
 
 
-
-
-
 function validateEmail(emailValue){
 
     const emailRegex =/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -215,15 +224,43 @@ function serverOpinion(){
     socket.on("signin-answer",answer=>{
         if(answer.message != "Welcome"){
             signinNotification.style.display = "block";
-            signinNotification.innerHTML = answer.message;
+            signinNotification.innerHTML = "username and password dont match";
             signinNotification.style.left = "130px";
             animate(signinNotification);
+            console.log(answer.message);
         }
-        else{
-            proceedToApp = true;
+        else if(answer.message == "Welcome"){
+                            
+            let win = new AppWindow({
+                width: 1920,
+                height: 1080,
+                frame: false,
+                
+                webPreferences:{ 
+                    enableRemoteModule: true,
+                    nodeIntegration: true,
+                }
+
+            });
+            
+            win.loadURL(url.format({
+                pathname: path.join(__dirname,"main.html"),
+                protocol: 'file:',
+                slashes:true
+            }));
+
+            sendUsername().then();
+            currentWindow.close();            
         }
     });
     
+}
+
+function sendUsername(){
+    return new Promise((resolve,reject)=>{
+        ipc.send('get-username',signinUsername.value);
+     
+    });
 }
 
 

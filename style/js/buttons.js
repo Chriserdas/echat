@@ -49,7 +49,6 @@ function frameButtons(){
     eyeButtonsMap.set(signupEye,[signupPassText,eyeIcon2,eyeSlashIcon2]);
     eyeButtonsMap.set(rewriteEye,[rewritePassText,eyeIcon3,eyeSlashIcon3]);
 
-    console.log(eyeIcon)
     const closeButton = document.getElementById("close-btn");
     const maximizeButton = document.getElementById("max-btn");
     const minButton = document.getElementById("min-btn");
@@ -194,7 +193,7 @@ function signin(access,out){
 
     forgotPass.addEventListener(out,()=>{
         forgotPass.style.color = "dimgrey";
-        console.log("sadasd");
+
     });
 
     signInButton.addEventListener(access,() =>{

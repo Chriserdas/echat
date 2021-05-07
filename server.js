@@ -133,57 +133,66 @@ function validateUsername(name){
 }
 
 function handleSignin(key,name,socket){
-    
+    let id = 0;
     if(key == "signinUsername"){
-        if(!getId(name)){
+        
+        getId(name).then(value =>{
+
+            key = "signinPassword"
+
+            socket.on(key,data=>{
+                validateUser(value,data).then(result=>{
+                    socket.emit("signin-answer",{message:
+                        "Welcome"
+                    });
+                }).catch(error =>{
+                    socket.emit("signin-answer",{message:
+                        "username and password dont match"
+                    });
+                })
+            });
+        }).catch(noSuchUser=>{
             socket.emit("signin-answer",{ message: 
                 "Username doesnt exist"
             });
-        }
-    }
-    else{
-        if(!getId(name)){
-            if(validateUser(getId(name),name)){
-                socket.emit("signin-answer",{message:
-                    "Welcome"
-                });
-            }
-            else{
-                socket.emit("signin-answer",{message:
-                    "username and password dont match"
-                });
-            }
-        }
+        })
     }
 }
 
 function getId(name){
     let statement = "SELECT id FROM ids_usernames WHERE username = ?";
 
-    connection.query(statement,name,(err,result,fields) =>{
-        
-        if(result.length > 0)
-            return result;
-        
-        else 
-            return false;
-        
+    return new Promise((resolve, reject) =>{
+        connection.query(statement,name,(err,result,fields) =>{
+            
+            if(result.length > 0){
+                resolve(result[0].id);
+            }
+            
+            else{
+                reject();
+            }
+        });
     });
+        
 }
 
 function validateUser(userId,password){
     let statement = "SELECT password FROM ids_passwords WHERE id = ?"
+    
+    return new Promise((resolve,reject) =>{
+        connection.query(statement, userId, (err,result,fields) =>{
 
-    connection.query(statement, userId, (err,result,fields) =>{
-
-        if(result == password.value)
-            return true;
-
-        else
-            return false;      
-
+            
+            if(result== password.value){
+                resolve();
+            }
+            else{
+                reject();
+            }
+        });
     });
-
+        
 }
 
 
