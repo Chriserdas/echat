@@ -38,19 +38,26 @@
 
         <div class="friends">
             <div id="add-friend-img-container">
-                <img src="img/add-friend.svg" id ="add-friend-img">
+                <img draggable="false" src="img/add-friend.svg" id ="add-friend-img">
             </div>
         </div>
 
 
         <div class="groups">
             <div id="create-group-img-container">
-                <img src="img/createGroup.svg" id ="create-group-img">
+                <img draggable="false" src="img/createGroup.svg" id ="create-group-img">
             </div>
         </div>
 
         <div class="acc-settings">
-            
+
+            <div id ="notification">
+                <img src="img/notification.svg" id="not-img">
+            </div>
+
+            <div id ="settings">
+                <img src="img/settings.svg">
+            </div>
         </div>
 
         <div class="user-communication">
@@ -59,47 +66,63 @@
                 <div id ="friend-nickname">nickname</div>
             </div>
 
-            <div id="message-chat">
-                <form class="textarea">
+            <div class="message-chat">
+                <form id="textarea">
                     <textarea id ="user-write" name="user-write" rows="1" placeholder="message..."></textarea>
 
                 </form>
 
                 <div id = "add-photo-container">
                     <div id = "send-photo">
-                        <img src="img/plus.svg" id="plus">
+                        <img draggable="false" src="img/plus.svg" id="plus">
                     </div>
                 </div>
             </div>
 
             <div id = "call-image"> 
-                <img src="img/call.svg">
+                <img draggable="false" src="img/call.svg">
             </div>
 
             <div id = "video-call-image">
-                <img src="img/video-call.svg">
+                <img draggable="false" src="img/video-call.svg">
             </div>
 
             <div id = "friend-settings">
-                <img id = "friend-settings-img" src="img/friend-settings.svg">
+                <img draggable="false" id = "friend-settings-img" src="img/friend-settings.svg">
             </div>
-
-
         </div>
         
         <div class = "user-activity">
             <div id = "username">username</div>
 
             <div id = "mute">
-                <img src="img/unmute.svg" id ="unmuted mic">
+                <img draggable="false" src="img/unmute.svg" id ="unmuted mic">
             </div>
 
             <div id = "mute-sound">
-                <img src="img/sound.svg" id = "unmuted-sound">
+                <img draggable="false" src="img/sound.svg" id = "unmuted-sound">
             </div>
         </div>
 
+        <div class="search-user">
+            <form>
+                <textarea id="search" name="search" rows="1" placeholder="Type your friend's nickname..." maxlength="20"></textarea>
+            </form>
+        </div>
+
+        <div class="settings">
+            <div id="general">GENERAL</div>
+            <div id="hotkeys">HOTKEYS</div>
+
+            <div id="close-settings">&times;</div>
+        </div>
+
+        <div class="notification">
+            <div id="notification-title">Notifications</div>
+        </div>
+
         
+
     </body>
     <script src="js/app.js"></script>
 </html>

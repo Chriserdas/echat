@@ -5,6 +5,8 @@ const electron = require('electron');
 const url = require('url');
 const path = require('path');
 
+let sessionID;
+
 let username;
 const{app ,BrowserWindow} = electron;
 let AppWindow = electron.BrowserWindow;
@@ -44,8 +46,16 @@ app.on('ready', function(){
     ipcMain.on("request-username",(event,arg)=>{
         event.sender.send("username",username);
     })
-
+   
+    ipcMain.on('get-id',(event,arg)=>{
+        sessionID = arg;
+    });
+    ipcMain.on('send-friend-name',(event,arg)=>{
+        mainWindow.webContents.send('friend-name',arg);
+    });
 });
+
+
 
 
 

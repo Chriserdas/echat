@@ -192,12 +192,12 @@ img:hover {
     height:28px;
 }
 
-#message-chat{
-    position:fixed;
+.message-chat{
+    position:relative;
     background-color:white;
-    top:97px;
-    left:315px;
-    max-width:75.6%;
+    top:8px;
+    left:200px;
+    width:calc(100% - 200px);
     height:100%;
     background-color: #505050;
 }
@@ -207,7 +207,7 @@ img:hover {
     resize: none;
     bottom:35px;
     left:400px;
-    width:1300px;
+    width:calc(82% - 400px);
     outline:none;
     border-top-right-radius: 6px;
     border-bottom-right-radius: 6px;
@@ -261,6 +261,39 @@ img:hover {
     height:40px;
 }
 
+.search-user{
+    position:fixed;
+    left:40%;
+    top:45px;
+    animation:goDown 0.8s;
+    display:none;
+}
+
+#search{
+    resize:none;
+    height:28px;
+    width:400px;
+    outline:none;
+    border-radius: 6px;
+    font-family: 'Oswald', sans-serif;
+    font-size:18px;
+    background-color: #292929;
+    border:none;
+    color:white;
+    font-weight:lighter;
+}
+
+
+@keyframes goDown{
+    0% {top: 0px; opacity: 1;}
+    100%{top:45px; opacity: 1;}
+}
+
+@keyframes goUp {
+    0% {top: 45px; opacity: 1;}
+    100%{top:0px; opacity: 0;}
+}
+
 
 /*----------------Group bar--------------*/
 
@@ -274,11 +307,15 @@ img:hover {
 
 #create-group-img-container img{
     position: relative;
-    top: 70px;
+    top: 100px;
     right:-50px;
-    width:60px;
-    height:60px;
+    width:70px;
+    height:70px;
 }
+
+
+
+/*----------------account settings----------------*/
 
 .acc-settings{
     position: fixed;
@@ -286,4 +323,143 @@ img:hover {
     background-color:#414141;
     width: 153.5px;
     height:64px;
+}
+
+#notification{
+    position: relative;
+    top:13px;
+    left:15px;
+}
+
+#notification img{
+    width:50px;
+    height:40px;
+}
+
+#settings{
+    position: fixed;
+    top:45px;
+    right: 25px;
+}
+
+#settings img{
+    width:35px;
+    height:45px;
+}
+
+#settings :hover{
+    animation:goRound 0.5s;
+}
+
+@keyframes goRound{
+    from {
+        transform:rotate(0deg);
+    }
+    to {
+        transform:rotate(90deg);
+    }
+}
+
+/*--------------settings---------------------*/
+
+.settings{
+    -webkit-user-select: none;
+    position: fixed;
+    width:100%;
+    height:100%;
+    display:none;
+    background:rgba(16,16,16,0.97);
+}
+
+#general {
+    position:relative;
+    top:200px;
+    left:30px;
+    padding:3px 19px;
+    width:150px;
+    font-family: 'Oswald', sans-serif;
+    font-size:30px;
+    color:white;
+}
+
+#hotkeys {
+    -webkit-user-select: none;
+    position:relative;
+    top:260px;
+    left:30px;
+    padding:3px 19px;
+    width:150px;
+    font-family: 'Oswald', sans-serif;
+    font-size:30px;
+    color:white;
+}
+
+#general:hover {
+    cursor: pointer;
+    animation:onSettingsHover 0.3s;
+    background-color:white;
+    color:#CC2936;
+    left:60px;
+}
+
+#hotkeys:hover{
+    cursor:pointer;
+    animation:onSettingsHover 0.3s;
+    background-color:white;
+    color:#CC2936;
+    left:60px;
+}
+
+@keyframes onSettingsHover {
+    0% {left: 30px; opacity: 1;}
+    100%{left:60px; opacity: 1;}
+}
+
+#close-settings{
+    position:fixed;
+    top:90px;
+    right:40px;
+    font-size:36px;
+    color:darkgray;
+    border:2px solid darkgray;
+    font-family: 'Oswald', sans-serif;
+    padding:2px 23px;
+    border-radius:80%;
+}
+
+#close-settings:hover{
+    cursor:pointer;
+    border-color:white;
+    background-color:white;
+    color:#CC2936;
+}
+
+/*----------------notifications--------------*/
+
+.notification{
+    position:fixed;
+    width: 315px;
+    height:100%;
+    background-color:#212529;
+    left:0px;
+    display:none;
+    animation:notifications-animation 0.6s ;
+}
+
+#notification-title{
+    position:relative;
+    top:0px;
+    left:0px;
+    font-family: 'Oswald', sans-serif;
+    font-size:25px;
+    color:white;
+    background-color:#171515;
+    width:169px;
+    padding:40px 73px;
+}
+
+
+@keyframes notifications-animation{
+    0% {left: -200px;}
+    100%{left:0px;}
 }

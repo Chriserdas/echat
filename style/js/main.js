@@ -40,7 +40,6 @@ let proceedToApp = false;
 
 signupButton.addEventListener('click', e=>{
     e.preventDefault();
-
     if(signUpUsername.value === ""){
         email.style.borderBottom = "0px";
         signupPassword.style.borderBottom = "0px";
@@ -103,7 +102,6 @@ signupButton.addEventListener('click', e=>{
         
     }
     
-    
 });
 
 signinButton.addEventListener('click',e=>{
@@ -137,11 +135,28 @@ signinButton.addEventListener('click',e=>{
     }
     else{
         socket = io.connect('http://localhost:3000');
+        
         emitSigninData();
         serverOpinion();
     }
     
 });
+
+
+
+ipc.on('friend-name',(event,arg)=>{
+    console.log("asdasd");
+    socket.emit('friend-name',arg);
+});
+
+
+
+
+
+
+
+
+
 
 
 function validateEmail(emailValue){
@@ -230,7 +245,7 @@ function serverOpinion(){
             console.log(answer.message);
         }
         else if(answer.message == "Welcome"){
-                            
+            
             let win = new AppWindow({
                 width: 1920,
                 height: 1080,
@@ -250,16 +265,29 @@ function serverOpinion(){
             }));
 
             sendUsername().then();
-            currentWindow.close();            
+            sendSessionId().then(()=>{
+                currentWindow.hide();
+                signinUsername.value = "";
+                signinPassword.value = "";
+            });            
         }
     });
+    
     
 }
 
 function sendUsername(){
     return new Promise((resolve,reject)=>{
         ipc.send('get-username',signinUsername.value);
-     
+    });
+}
+
+function sendSessionId(){
+    return new Promise((resolve,reject)=>{
+        socket.on('socket-id',id=>{
+            ipc.send('get-id',id);   
+            resolve();
+        });
     });
 }
 

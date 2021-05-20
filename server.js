@@ -24,8 +24,6 @@ app.use(express.static(path.join(__dirname,'style')));
 
 server.listen(PORT,()=>{
     console.log(`Server running on port: ${PORT}`);
-
-    
 });
 
 //Connect with sql db
@@ -58,7 +56,6 @@ io.on('connection',socket=>{
     console.log("New connection");
 
     //Complete Signup!
-
     for(let [key,value] of emitedMessagesMap.entries()){
 
         socket.on(key, data=>{
@@ -98,8 +95,18 @@ io.on('connection',socket=>{
             
         });
     }
+    socket.on('friend-name',data=>{
+        console.log(data);
+    });
     
 });
+
+
+io.on('disconnect',()=>{
+    console.log("disconnected");
+});
+
+
 
 
 
@@ -145,6 +152,7 @@ function handleSignin(key,name,socket){
                     socket.emit("signin-answer",{message:
                         "Welcome"
                     });
+                    socket.emit('socket-id',socket.id);
                 }).catch(error =>{
                     socket.emit("signin-answer",{message:
                         "username and password dont match"
