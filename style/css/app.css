@@ -305,6 +305,7 @@ img:hover {
     height:100%;
 }
 
+
 #create-group-img-container img{
     position: relative;
     top: 100px;
@@ -325,16 +326,19 @@ img:hover {
     height:64px;
 }
 
+
 #notification{
     position: relative;
     top:13px;
     left:15px;
 }
 
+
 #notification img{
     width:50px;
     height:40px;
 }
+
 
 #settings{
     position: fixed;
@@ -342,14 +346,17 @@ img:hover {
     right: 25px;
 }
 
+
 #settings img{
     width:35px;
     height:45px;
 }
 
+
 #settings :hover{
     animation:goRound 0.5s;
 }
+
 
 @keyframes goRound{
     from {
@@ -362,6 +369,7 @@ img:hover {
 
 /*--------------settings---------------------*/
 
+
 .settings{
     -webkit-user-select: none;
     position: fixed;
@@ -370,6 +378,7 @@ img:hover {
     display:none;
     background:rgba(16,16,16,0.97);
 }
+
 
 #general {
     position:relative;
@@ -381,6 +390,7 @@ img:hover {
     font-size:30px;
     color:white;
 }
+
 
 #hotkeys {
     -webkit-user-select: none;
@@ -394,6 +404,7 @@ img:hover {
     color:white;
 }
 
+
 #general:hover {
     cursor: pointer;
     animation:onSettingsHover 0.3s;
@@ -401,6 +412,7 @@ img:hover {
     color:#CC2936;
     left:60px;
 }
+
 
 #hotkeys:hover{
     cursor:pointer;
@@ -410,10 +422,12 @@ img:hover {
     left:60px;
 }
 
+
 @keyframes onSettingsHover {
     0% {left: 30px; opacity: 1;}
     100%{left:60px; opacity: 1;}
 }
+
 
 #close-settings{
     position:fixed;
@@ -427,6 +441,7 @@ img:hover {
     border-radius:80%;
 }
 
+
 #close-settings:hover{
     cursor:pointer;
     border-color:white;
@@ -434,7 +449,9 @@ img:hover {
     color:#CC2936;
 }
 
+
 /*----------------notifications--------------*/
+
 
 .notification{
     position:fixed;
@@ -445,6 +462,7 @@ img:hover {
     display:none;
     animation:notifications-animation 0.6s ;
 }
+
 
 #notification-title{
     position:relative;

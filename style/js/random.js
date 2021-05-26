@@ -51,7 +51,7 @@ app.on('ready', function(){
         sessionID = arg;
     });
     ipcMain.on('send-friend-name',(event,arg)=>{
-        mainWindow.webContents.send('friend-name',arg);
+        mainWindow.webContents.send('friend-name',username+","+arg);
     });
 });
 

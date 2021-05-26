@@ -4,8 +4,6 @@ const http = require('http')
 const socketio = require('socket.io');
 
 
-var isAlreadyUsed = false;
-var counter = 0;
 var sql = require('mysql');
 let configure = require("./config.js");
 const { stat } = require('fs');
@@ -36,97 +34,106 @@ connection.connect(function(err) {
     console.log("Connected to sql database!");
 });
 
-connection.query(count,(err,result)=>{
-    counter = result[0].total;
-});
+
 
 //Run when client connects
 
-let emitedMessagesMap = new Map();
-
-emitedMessagesMap.set("Username", "INSERT INTO ids_usernames VALUES(?,?)");
-emitedMessagesMap.set("password","INSERT INTO ids_passwords VALUES(?,?)");
-emitedMessagesMap.set("email", "INSERT INTO ids_emails VALUES(?,?)");
-
-emitedMessagesMap.set("signinUsername", "");
-emitedMessagesMap.set("signinPassword", "");
-
-
 io.on('connection',socket=>{
     console.log("New connection");
-
-    //Complete Signup!
-    for(let [key,value] of emitedMessagesMap.entries()){
-
-        socket.on(key, data=>{
-                
-            if(key == "Username"){
-                
-                validateUsername(data).then(answer =>{
-                    if(answer){
-                        socket.emit("username-used",{ message: 
-                            "Username is already used"
-                        });
-                    
-                    }
-                    else{
-                        socket.emit("username-used",{ message: 
-                            ""
-                        });
-                        ++counter;
-                        insertIntoTable(value,data);
-
-                    }
-                })
-                .catch(error=>{
-                    throw error;
-                });
-                
-            }
-            else if(key == 'password' || key == "email"){
-
-                if(!isAlreadyUsed){
-                    insertIntoTable(value,data);
-                }
-            }
-            else{
-                handleSignin(key,data,socket);
-            }
-            
+    
+    //Sign Up
+    getSignupData(socket).then(values=>{
+        insertIntoTable("INSERT INTO usernames_passwords_emails VALUES (?,?,?)",values);
+        socket.emit("username-used",{ message: 
+            ""
         });
-    }
-    socket.on('friend-name',data=>{
-        console.log(data);
+    }).catch(()=>{
+        socket.emit("username-used",{ message: 
+            "Username is already used"
+        });
     });
+    
+    //Sign In
+    handleSignin(socket);
+
+    //Friend request
+    socket.on('friend-name',data=>{
+        let friendship = friend_request_parser(data);
+        
+        insertIntoTable("INSERT INTO pending_friends VALUES (?,?)",friendship);
+
+        /*selectFromTable("online_users","session_id",socket.id).then(bool=>{
+        
+            if(bool){
+    
+            }
+        });*/
+
+
+    });
+
+    socket.on('disconnect',()=>{
+        deleteFromTable("online_users","session_id",socket.id);
+    });
+
     
 });
 
 
-io.on('disconnect',()=>{
-    console.log("disconnected");
-});
+
+function getSignupData(socket){
+    let signupName, signupPass,signupEmail;
+    
+    return new Promise((resolve,reject) =>{
+    
+        getData(socket,'Username').then(username =>{
+            foundInTable("usernames_passwords_email", "username", username).then(response=>{
+                if(response){
+                    reject();
+                }
+                else{
+                    signupName = username;
+                    getData(socket,'password').then(password=>{
+                        signupPass = password;
+                    });
+            
+                    getData(socket,'email').then(email=>{
+                        signupEmail = email;
+                        let values = [signupName,signupPass,signupEmail]
+                        resolve(values); 
+                    });
+                }
+            });
+        });
+    });
+}
 
 
+function getData(socket,message){
+    
+    return new Promise((resolve,reject) =>{
+        socket.on(message,data=>{
+            resolve(data);
+        });
+    });
+}
 
 
-
-
-function insertIntoTable(statement, element){
-    connection.query(statement,[counter,element],(err,results,fields) =>{
+function insertIntoTable(statement,array){
+    connection.query(statement,array,(err,results,fields) =>{
         if(err)
             return console.error(err.message);
     });
 }
 
-function validateUsername(name){
-    let statement = "SELECT username FROM ids_usernames WHERE username = ?";
-    
+function foundInTable(table_name,selectable,name){
+    let statement = "SELECT " + selectable +"FROM " + table_name + "WHERE " + selectable + "= ?";
+    let isAlreadyUsed = false;
     return new Promise((resolve,reject)=>{
         connection.query(statement,name,(err,result,fields) =>{
     
             if(result.length > 0){
                 isAlreadyUsed = true;
-    
             }
             else{
                 isAlreadyUsed = false;
@@ -139,59 +146,59 @@ function validateUsername(name){
         
 }
 
-function handleSignin(key,name,socket){
-    let id = 0;
-    if(key == "signinUsername"){
+function deleteFromTable(table_name,fieldToSearch,itemToDelete){
+
+    statement = "DELETE FROM " + table_name + " WHERE " + fieldToSearch + " = ?";
+    connection.query(statement,itemToDelete,(err,result,fields) =>{
+        if(err)
+            return console.error(err.message);
+    });
+    
+}
+
+function handleSignin(socket){
+    
+    getData(socket,'signinUsername').then(username=>{
         
-        getId(name).then(value =>{
 
-            key = "signinPassword"
-
-            socket.on(key,data=>{
-                validateUser(value,data).then(result=>{
-                    socket.emit("signin-answer",{message:
-                        "Welcome"
-                    });
-                    socket.emit('socket-id',socket.id);
-                }).catch(error =>{
-                    socket.emit("signin-answer",{message:
-                        "username and password dont match"
-                    });
-                })
-            });
+        getData(socket,'signinPassword').then(pass=>{
+            validateUser(username.value,pass).then(()=>{
+                socket.emit("signin-answer",{message:
+                    "Welcome"
+                });
+                socket.emit('socket-id',socket.id);
+                insertIntoTable("INSERT INTO online_users VALUES (?,?)",[username,socket.id])
+            }).catch(error =>{
+                socket.emit("signin-answer",{message:
+                    "username and password dont match"
+                });
+            })
         }).catch(noSuchUser=>{
             socket.emit("signin-answer",{ message: 
                 "Username doesnt exist"
             });
-        })
-    }
-}
-
-function getId(name){
-    let statement = "SELECT id FROM ids_usernames WHERE username = ?";
-
-    return new Promise((resolve, reject) =>{
-        connection.query(statement,name,(err,result,fields) =>{
-            
-            if(result.length > 0){
-                resolve(result[0].id);
-            }
-            
-            else{
-                reject();
-            }
         });
     });
-        
 }
 
-function validateUser(userId,password){
-    let statement = "SELECT password FROM ids_passwords WHERE id = ?"
+
+function getColumn(table_name,selectable1,selectable2) {
+    
+    let statement = "SELECT " + selectable1 + " FROM " + table_name + " WHERE " + selectable2 + " = ?";
+
+    connection.query(statement,itemToDelete,(err,result,fields) =>{
+        
+        console.log(result);
+        return result;
+    });
+}
+
+function validateUser(name,password){
+    let statement = "SELECT password FROM usernames_passwords_emails WHERE username = ?"
     
     return new Promise((resolve,reject) =>{
-        connection.query(statement, userId, (err,result,fields) =>{
+        connection.query(statement, name, (err,result,fields) =>{
 
-            
             if(result== password.value){
                 resolve();
             }
@@ -200,10 +207,11 @@ function validateUser(userId,password){
             }
         });
     });
-        
 }
 
 
-
+function friend_request_parser(str){
+    return str.split(',');
+}
 
 
