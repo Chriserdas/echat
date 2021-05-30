@@ -8,7 +8,8 @@ var sql = require('mysql');
 let configure = require("./config.js");
 const { stat } = require('fs');
 
-let count = "SELECT COUNT(*) AS total FROM ids_passwords";
+
+//let count = "SELECT COUNT(*) AS total FROM ids_passwords";
 
 
 const app = express();
@@ -16,8 +17,6 @@ const server = http.createServer(app);
 const io = socketio(server);
 
 const PORT = 3000 || process.env.PORT;
-
-app.use(express.static(path.join(__dirname,'style')));
 
 
 server.listen(PORT,()=>{
@@ -28,6 +27,7 @@ server.listen(PORT,()=>{
 
 var connection = sql.createConnection(configure);
 
+var username = "";
 
 connection.connect(function(err) {
     if (err) throw err;
@@ -76,7 +76,9 @@ io.on('connection',socket=>{
         deleteFromTable("online_users","session_id",socket.id);
     });
 
-    
+    if(username != ""){
+        console.log("insert user");
+    }
 });
 
 
@@ -160,14 +162,14 @@ function handleSignin(socket){
     
     getData(socket,'signinUsername').then(username=>{
         
-
         getData(socket,'signinPassword').then(pass=>{
             validateUser(username.value,pass).then(()=>{
                 socket.emit("signin-answer",{message:
                     "Welcome"
                 });
                 socket.emit('socket-id',socket.id);
-                insertIntoTable("INSERT INTO online_users VALUES (?,?)",[username,socket.id])
+                insertIntoTable("INSERT INTO online_users VALUES (?,?)",[username,socket.id]);
+
             }).catch(error =>{
                 socket.emit("signin-answer",{message:
                     "username and password dont match"
@@ -187,7 +189,7 @@ function getColumn(table_name,selectable1,selectable2) {
     let statement = "SELECT " + selectable1 + " FROM " + table_name + " WHERE " + selectable2 + " = ?";
 
     connection.query(statement,itemToDelete,(err,result,fields) =>{
-        
+
         console.log(result);
         return result;
     });
