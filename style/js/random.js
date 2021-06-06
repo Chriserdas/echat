@@ -9,15 +9,15 @@ let sessionID;
 
 let username;
 const{app ,BrowserWindow} = electron;
-let AppWindow = electron.BrowserWindow;
 
 const ipcMain = electron.ipcMain;
 
 
-let mainWindow;
-
+let mainWindow,win;
+let window;
 
 app.on('ready', function(){
+    let friendname;
 
     mainWindow = new BrowserWindow({ 
         titleBarStyle: 'customButtonsOnHover', 
@@ -38,7 +38,6 @@ app.on('ready', function(){
         slashes:true
     }));
 
-    
     ipcMain.on('get-username',(event,arg)=>{
         username = arg;
     });
@@ -51,8 +50,9 @@ app.on('ready', function(){
         sessionID = arg;
     });
     ipcMain.on('send-friend-name',(event,arg)=>{
-        mainWindow.webContents.send('friend-name',username+","+arg);
+        mainWindow.webContents.send('friend-name',username + "," + arg);
     });
+    
 });
 
 

@@ -6,7 +6,7 @@ const url = require('url');
 
 const ipc = electron.ipcRenderer;
 
-
+let win;
 let AppWindow = electron.remote.BrowserWindow;  
 let currentWindow = AppWindow.getFocusedWindow();
 
@@ -145,15 +145,8 @@ signinButton.addEventListener('click',e=>{
 
 
 ipc.on('friend-name',(event,arg)=>{
-    console.log("asdasd");
     socket.emit('friend-name',arg);
 });
-
-
-
-
-
-
 
 
 
@@ -246,11 +239,10 @@ function serverOpinion(){
         }
         else if(answer.message == "Welcome"){
             
-            let win = new AppWindow({
+            win = new AppWindow({
                 width: 1920,
                 height: 1080,
                 frame: false,
-                
                 webPreferences:{ 
                     enableRemoteModule: true,
                     nodeIntegration: true,
@@ -263,13 +255,20 @@ function serverOpinion(){
                 protocol: 'file:',
                 slashes:true
             }));
+            
 
             sendUsername().then();
             sendSessionId().then(()=>{
-                currentWindow.hide();
+                //currentWindow.hide();
                 signinUsername.value = "";
                 signinPassword.value = "";
+                
             });            
+            handleApp();
+
+            socket.on("direct-friend-request",data =>{
+                console.log(data);
+            });
         }
     });
     
@@ -292,3 +291,14 @@ function sendSessionId(){
 }
 
 
+function handleApp() {
+    socket.on("friend-request",data=>{
+        win.webContents.on('did-finish-load',()=>{
+            win.webContents.send("friend",data);
+        });
+    });
+
+    
+
+    
+}

@@ -471,7 +471,7 @@ img:hover {
     font-family: 'Oswald', sans-serif;
     font-size:25px;
     color:white;
-    background-color:#171515;
+    background-color:#07080a ;
     width:169px;
     padding:40px 73px;
 }
@@ -480,4 +480,94 @@ img:hover {
 @keyframes notifications-animation{
     0% {left: -200px;}
     100%{left:0px;}
+}
+
+#friend-requests{
+    position:fixed;
+    top:400px;
+    left:273.5px;
+    background-color:#07080a;
+    padding:10px 14px;
+    transform:rotate(90deg);
+    color:white;
+    font-family: 'Oswald', sans-serif;
+    animation: friend-request-animation 1s;
+}
+
+
+
+.friend-requests-content{
+    position:relative;
+    top:0px;
+    padding:10px 13px;
+    border-top: 3px solid #212529;
+    color:white;
+    height:60px;
+    font-size:18px;
+    font-family: 'Oswald', sans-serif;
+    background-color:#0c0e10 ;
+    animation: friend-request-animation 1s;
+}
+
+#messages{
+    position:fixed;
+    top:510px;
+    left:292.4px;
+    background-color:#07080a;
+    padding:10px 14px;
+    transform:rotate(90deg);
+    color:white;
+    font-family: 'Oswald', sans-serif;
+    animation: friend-request-animation 1s;
+}
+
+#messages:hover, #friend-requests:hover{
+    cursor:pointer;
+    background-color:#13161b;
+}
+
+#nickname{
+    position:relative;
+    left:20px;
+}
+
+
+
+.friend-requests-content:hover{
+    background-color:#000000;
+}
+
+
+#check-notification{
+    position:relative;
+    left:240px;
+    bottom:50px;
+    width:25px;
+    height:25px;
+    display: none;
+}
+
+#check-notification:hover{
+    content:url("../img/check-hovered.svg");
+}
+
+
+#x-notification{
+    position:relative;
+    bottom:40px;
+    left:240px;
+    width:25px;
+    height:25px;
+    display: none;
+}
+
+#x-notification:hover{
+    content:url("../img/x-hovered.svg");
+}
+
+
+@keyframes friend-request-animation{
+    0% {opacity:0;}
+    20% {opacity:0;}
+    100%{opacity:1;}
 }

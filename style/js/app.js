@@ -12,6 +12,7 @@ const minimize = document.getElementById('min-btn');
 let goToMute = new Audio("audio/goToMute.mp3");
 let getUnmuted = new Audio("audio/unmute.mp3");
 
+
 const createGroup = document.getElementById("create-group-img");
 const friendSettingsImage = document.getElementById("friend-settings-img");
 const muteImage = document.getElementById("unmuted mic");
@@ -48,20 +49,49 @@ const acc_settings = document.querySelector("#settings");
 const notification = document.querySelector(".notification");
 const notification_button = document.querySelector("#notification");
 
+/*let friend_request = document.querySelector(".friend-requests-content");
+let accept_friend_request = document.querySelector("#check-notification");
+let decline_friend_request = document.querySelector("#x-notification");*/
+let friend_requests = document.querySelector("#friend-requests");
+let messages = document.querySelector("#messages");
+
 /*----------------------------------*/
 
 
 let isClicked = false;
 let isMuted = false;
 let isSoundMuted = false;
-
+let notHit = false;
 
 const appWindow = Window.getCurrentWindow();
+let friend_divs = [];
+
+
+
+
 ipcRenderer.send("request-username","hello");
+
+
 
 ipcRenderer.on("username",(event,arg)=>{
     username.innerHTML = arg;
 });
+
+
+ipcRenderer.on("friend",(event,arg)=>{
+
+    createFriendRequest(arg);
+    
+});
+
+
+
+
+
+appWindow.on("close",()=>{
+    app.quit();
+});
+
 
 close.addEventListener('click', ()=>{
     app.quit();
@@ -159,6 +189,7 @@ sendPhotoImage.addEventListener("click",()=>{
 });
 
 searchTextarea.addEventListener('keypress',e=>{
+
     if(e.key.charCodeAt() == 69){
         e.preventDefault();
         ipcRenderer.send('send-friend-name',searchTextarea.value);
@@ -223,9 +254,21 @@ close_settings.addEventListener('click', ()=>{
 
 notification_button.addEventListener('click', ()=>{
 
-    if(notification.style.display == "none"){
+    notHit = !notHit;
+    if(notHit == true){
         notification.style.display = "block";
-        animate(notification,"notification");
+
+        for(let friend of friend_divs){
+            friend.addEventListener("mouseenter",()=>{
+                friend.childNodes.item(3).style.display ="block";
+                friend.childNodes.item(4).style.display ="block";
+            });
+
+            friend.addEventListener("mouseleave",()=>{
+                friend.childNodes.item(3).style.display ="none";
+                friend.childNodes.item(4).style.display ="none";
+            });
+        }
         
     }
     else{
@@ -234,12 +277,62 @@ notification_button.addEventListener('click', ()=>{
 
 });
 
+messages.addEventListener('click', ()=>{
 
-document.addEventListener('mouseup', function(e) {
-   
-    if (!notification.contains(e.target)) {
-        notification.style.display = 'none';
+    for(let friend of friend_divs){
+        friend.style.display = "none";
     }
 });
+
+friend_requests.addEventListener('click', ()=>{
+
+    for(let friend of friend_divs){
+        friend.style.display = "block";
+    }
+});
+
+
+document.addEventListener('mouseup', function(e) {
+
+    if (!notification.contains(e.target)) {
+        if(notHit){
+            notification.style.display = 'none';
+            notHit = !notHit;  
+        }    
+              
+    }
+    
+});
+
+function createFriendRequest(name){
+    let friend = document.createElement("div");
+    let linebreak = document.createElement('br');
+
+    friend.className = "friend-requests-content";                      
+    let friendname = document.createTextNode(name.toString());
+    let message = document.createTextNode("\nsent you a friend request");
+
+    friendname.id = "nickname";
+    friend.appendChild(friendname);
+    friend.appendChild(linebreak);
+    friend.appendChild(message);
+
+    let checkImg = document.createElement("img");
+    let x_img = document.createElement("img");
+
+    checkImg.src = "img/check.svg";
+    checkImg.id = "check-notification";
+
+    x_img.src = "img/x.svg";
+    x_img.id = "x-notification";
+
+    friend.appendChild(checkImg);
+    friend.appendChild(x_img);
+
+    friend_divs.push(friend);
+
+    notification.appendChild(friend);
+}
+
 
 

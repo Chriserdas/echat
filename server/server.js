@@ -6,10 +6,9 @@ const socketio = require('socket.io');
 
 var sql = require('mysql');
 let configure = require("./config.js");
-const { stat } = require('fs');
 
 
-//let count = "SELECT COUNT(*) AS total FROM ids_passwords";
+
 
 
 const app = express();
@@ -23,7 +22,6 @@ server.listen(PORT,()=>{
     console.log(`Server running on port: ${PORT}`);
 });
 
-//Connect with sql db
 
 var connection = sql.createConnection(configure);
 
@@ -54,7 +52,14 @@ io.on('connection',socket=>{
     });
     
     //Sign In
-    handleSignin(socket);
+    handleSignin(socket).then(username => {
+        getColumn("pending_friends","sender","receiver",username).then(senders=>{
+            
+            for(const sender of senders){
+                socket.emit("friend-request",sender.sender);
+            }
+        });
+    });
 
     //Friend request
     socket.on('friend-name',data=>{
@@ -62,23 +67,24 @@ io.on('connection',socket=>{
         
         insertIntoTable("INSERT INTO pending_friends VALUES (?,?)",friendship);
 
-        /*selectFromTable("online_users","session_id",socket.id).then(bool=>{
-        
-            if(bool){
-    
+        foundInTable("online_users","username",friendship[1]).then(response=>{
+            
+            if(response){
+                getColumn("online_users","session_id","username",friendship[1]).then(id =>{
+                    console.log(id[0].session_id);
+                    io.sockets.emit("direct-friend-request","hello");
+
+                });
+
             }
-        });*/
-
-
+        });
     });
 
     socket.on('disconnect',()=>{
         deleteFromTable("online_users","session_id",socket.id);
     });
 
-    if(username != ""){
-        console.log("insert user");
-    }
+    
 });
 
 
@@ -89,7 +95,7 @@ function getSignupData(socket){
     return new Promise((resolve,reject) =>{
     
         getData(socket,'Username').then(username =>{
-            foundInTable("usernames_passwords_email", "username", username).then(response=>{
+            foundInTable("usernames_passwords_emails", "username", username).then(response=>{
                 if(response){
                     reject();
                 }
@@ -129,11 +135,10 @@ function insertIntoTable(statement,array){
 }
 
 function foundInTable(table_name,selectable,name){
-    let statement = "SELECT " + selectable +"FROM " + table_name + "WHERE " + selectable + "= ?";
+    let statement = "SELECT " + selectable +" FROM " + table_name + " WHERE " + selectable + " = ?";
     let isAlreadyUsed = false;
     return new Promise((resolve,reject)=>{
         connection.query(statement,name,(err,result,fields) =>{
-    
             if(result.length > 0){
                 isAlreadyUsed = true;
             }
@@ -143,7 +148,6 @@ function foundInTable(table_name,selectable,name){
             resolve(isAlreadyUsed);
             
         });
-
     });
         
 }
@@ -160,38 +164,42 @@ function deleteFromTable(table_name,fieldToSearch,itemToDelete){
 
 function handleSignin(socket){
     
-    getData(socket,'signinUsername').then(username=>{
-        
-        getData(socket,'signinPassword').then(pass=>{
-            validateUser(username.value,pass).then(()=>{
-                socket.emit("signin-answer",{message:
-                    "Welcome"
+    return new Promise((resolve,reject) =>{
+        getData(socket,'signinUsername').then(username=>{
+            
+            getData(socket,'signinPassword').then(pass=>{
+                validateUser(username.value,pass).then(()=>{
+                    socket.emit("signin-answer",{message:
+                        "Welcome"
+                    });
+                    socket.emit('socket-id',socket.id);
+                    insertIntoTable("INSERT INTO online_users VALUES (?,?)",[username,socket.id]);
+                    resolve(username);
+                }).catch(error =>{
+                    socket.emit("signin-answer",{message:
+                        "username and password dont match"
+                    });
+                    reject();
+                })
+            }).catch(noSuchUser=>{
+                socket.emit("signin-answer",{ message: 
+                    "Username doesnt exist"
                 });
-                socket.emit('socket-id',socket.id);
-                insertIntoTable("INSERT INTO online_users VALUES (?,?)",[username,socket.id]);
-
-            }).catch(error =>{
-                socket.emit("signin-answer",{message:
-                    "username and password dont match"
-                });
-            })
-        }).catch(noSuchUser=>{
-            socket.emit("signin-answer",{ message: 
-                "Username doesnt exist"
+                reject();
             });
         });
     });
 }
 
 
-function getColumn(table_name,selectable1,selectable2) {
+function getColumn(table_name,selectable1,selectable2,name) {
     
     let statement = "SELECT " + selectable1 + " FROM " + table_name + " WHERE " + selectable2 + " = ?";
 
-    connection.query(statement,itemToDelete,(err,result,fields) =>{
-
-        console.log(result);
-        return result;
+    return new Promise((resolve,reject) =>{
+        connection.query(statement,name,(err,result,fields) =>{
+            resolve(result);
+        });
     });
 }
 
@@ -201,7 +209,7 @@ function validateUser(name,password){
     return new Promise((resolve,reject) =>{
         connection.query(statement, name, (err,result,fields) =>{
 
-            if(result== password.value){
+            if(result == password.value){
                 resolve();
             }
             else{
