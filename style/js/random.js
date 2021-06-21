@@ -38,19 +38,27 @@ app.on('ready', function(){
         slashes:true
     }));
 
-    ipcMain.on('get-username',(event,arg)=>{
+    ipcMain.on('get-username',(_event,arg)=>{
         username = arg;
     });
 
-    ipcMain.on("request-username",(event,arg)=>{
+    ipcMain.on("request-username",(event,_arg)=>{
         event.sender.send("username",username);
     })
    
-    ipcMain.on('get-id',(event,arg)=>{
+    ipcMain.on('get-id',(_event,arg)=>{
         sessionID = arg;
     });
-    ipcMain.on('send-friend-name',(event,arg)=>{
+    ipcMain.on('send-friend-name',(_event,arg)=>{
         mainWindow.webContents.send('friend-name',username + "," + arg);
+    });
+
+    ipcMain.on("accepted-friend-request",(_event,arg)=>{
+        mainWindow.webContents.send('accepted-friend-request',username + "," + arg);
+    });
+
+    ipcMain.on("message-to-user",(_event,arg)=>{
+        mainWindow.webContents.send("message-to-user",username + "," + arg);
     });
     
 });

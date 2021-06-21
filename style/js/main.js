@@ -259,7 +259,7 @@ function serverOpinion(){
 
             sendUsername().then();
             sendSessionId().then(()=>{
-                //currentWindow.hide();
+                currentWindow.hide();
                 signinUsername.value = "";
                 signinPassword.value = "";
                 
@@ -267,7 +267,15 @@ function serverOpinion(){
             handleApp();
 
             socket.on("direct-friend-request",data =>{
-                console.log(data);
+                win.webContents.send("friend",data);
+            });
+
+            ipc.on("accepted-friend-request",(event,arg)=>{
+                socket.emit("accepted-friend-request",arg);
+            });
+
+            socket.on("accepted-friend",friendname=>{
+                win.webContents.send("accepted-friend",friendname);
             });
         }
     });
@@ -280,6 +288,7 @@ function sendUsername(){
         ipc.send('get-username',signinUsername.value);
     });
 }
+
 
 function sendSessionId(){
     return new Promise((resolve,reject)=>{
@@ -298,7 +307,14 @@ function handleApp() {
         });
     });
 
-    
+    socket.on('friend',data=>{
+        win.webContents.on('did-finish-load',()=>{
+            win.webContents.send("accepted-friend",data);
+        });
+    });
 
+    ipc.on("message-to-user",(event,arg)=>{
+        socket.emit("message-to-user",arg);
+    });
     
 }

@@ -17,15 +17,13 @@ const createGroup = document.getElementById("create-group-img");
 const friendSettingsImage = document.getElementById("friend-settings-img");
 const muteImage = document.getElementById("unmuted mic");
 const muteSoundImage = document.getElementById("unmuted-sound");
-let sendPhotoImage = document.getElementById("plus");
+
 
 
 let friendSettings = document.querySelector("#friend-settings");
 let mute = document.querySelector("#mute");
 let muteSound = document.getElementById("mute-sound");
 let username = document.getElementById("username");
-
-
 
 
 
@@ -56,7 +54,12 @@ let friend_requests = document.querySelector("#friend-requests");
 let messages = document.querySelector("#messages");
 
 /*----------------------------------*/
+/*-----------write-message--------------*/
+let sendPhotoImage = document.getElementById("plus");
+let sendMessage = document.getElementById("user-write");
 
+
+/*---------------------------------------*/
 
 let isClicked = false;
 let isMuted = false;
@@ -67,10 +70,7 @@ const appWindow = Window.getCurrentWindow();
 let friend_divs = [];
 
 
-
-
 ipcRenderer.send("request-username","hello");
-
 
 
 ipcRenderer.on("username",(event,arg)=>{
@@ -85,8 +85,9 @@ ipcRenderer.on("friend",(event,arg)=>{
 });
 
 
-
-
+ipcRenderer.on('accepted-friend',(event,arg)=>{
+    createFriendIcon(arg.toString());
+});
 
 appWindow.on("close",()=>{
     app.quit();
@@ -257,18 +258,6 @@ notification_button.addEventListener('click', ()=>{
     notHit = !notHit;
     if(notHit == true){
         notification.style.display = "block";
-
-        for(let friend of friend_divs){
-            friend.addEventListener("mouseenter",()=>{
-                friend.childNodes.item(3).style.display ="block";
-                friend.childNodes.item(4).style.display ="block";
-            });
-
-            friend.addEventListener("mouseleave",()=>{
-                friend.childNodes.item(3).style.display ="none";
-                friend.childNodes.item(4).style.display ="none";
-            });
-        }
         
     }
     else{
@@ -277,11 +266,13 @@ notification_button.addEventListener('click', ()=>{
 
 });
 
+
 messages.addEventListener('click', ()=>{
 
     for(let friend of friend_divs){
         friend.style.display = "none";
     }
+
 });
 
 friend_requests.addEventListener('click', ()=>{
@@ -301,10 +292,29 @@ document.addEventListener('mouseup', function(e) {
         }    
               
     }
-    
 });
 
+
+sendMessage.addEventListener('keypress',e=>{
+
+    if(e.key.charCodeAt() == 69){
+        e.preventDefault();
+        if(checkEmptyString(sendMessage.value) != "" ){
+            let userToSend = document.querySelector("#friend-nickname").innerHTML;
+            
+            ipcRenderer.send("message-to-user",userToSend + "," + sendMessage.value);
+
+            createMessage(sendMessage.value);
+        }
+        
+        sendMessage.value = "";
+    }
+   
+});
+
+
 function createFriendRequest(name){
+
     let friend = document.createElement("div");
     let linebreak = document.createElement('br');
 
@@ -332,7 +342,110 @@ function createFriendRequest(name){
     friend_divs.push(friend);
 
     notification.appendChild(friend);
+
+    //handle events
+    friend.addEventListener("mouseenter",()=>{
+        friend.childNodes.item(3).style.display ="block";
+        friend.childNodes.item(4).style.display ="block";
+        
+        
+
+        friend.childNodes.item(4).addEventListener('click', ()=>{
+            ipcRenderer.send("declined-friend-request",friend.childNodes.item(0).data);
+            friend.style.animation = "decline-friend-request-animation 1s"
+            
+            setTimeout(() => {
+                friend.remove();
+            }, 1000);
+        });
+    });
+
+    friend.childNodes.item(3).addEventListener('click', ()=>{
+            
+        ipcRenderer.send("accepted-friend-request",friend.childNodes.item(0).data);
+        friend.style.animation = "accept-friend-request-animation 1s"
+        
+        setTimeout(() => {
+            friend.remove();
+            createFriendIcon(friend.childNodes.item(0).data.toString());
+        }, 1000);
+        
+        
+    });
+
+    friend.addEventListener("mouseleave",()=>{
+        friend.childNodes.item(3).style.display ="none";
+        friend.childNodes.item(4).style.display ="none";
+    });
 }
 
 
+function getFirstChar(str) {
+    return str.charAt(0).toUpperCase();
+}
 
+
+function removeFromArray(arr, value) { 
+    
+    return arr.filter(function(ele){ 
+        return ele != value; 
+    });
+}
+
+
+function createFriendIcon(friendname){
+    let friendIcon = document.createElement("div");
+    friendIcon.className = "friend-icon"
+    let name = document.createTextNode(getFirstChar(friendname));
+
+    friendIcon.appendChild(name);
+    document.querySelector(".friends").appendChild(friendIcon);
+
+    let friendlabel = document.createElement("div");
+    let friendnametext = document.createTextNode(friendname);
+    friendlabel.className = "friendlabel";
+    friendlabel.appendChild(friendnametext);
+    document.querySelector(".friends").appendChild(friendlabel);
+    
+    friendIcon.addEventListener('click', ()=>{
+        document.querySelector("#friend-nickname").innerHTML = friendname;
+        document.querySelector(".no-conversation").style.display = "none";
+        sendMessage.value = "";
+    });
+
+    friendIcon.addEventListener('mouseenter',()=>{
+        friendlabel.style.display = "block";
+    });
+
+    friendIcon.addEventListener('mouseleave',()=>{
+        friendlabel.style.display = "none";
+    });
+
+
+}
+
+
+function checkEmptyString(str){
+    
+    if(str.charAt(0) == " "){
+        str = str.substring(1);
+        return checkEmptyString(str);
+    }
+    else{
+        return str;
+    }
+}
+
+function createMessage(element) {
+    let send_container = document.createElement("div");
+    send_container.className = "send-container";
+    document.querySelector(".display-chat-area").append(send_container);
+
+    
+    let message = document.createElement("div");
+    let textmessage = document.createTextNode(element);
+    message.className = "message"
+
+    message.appendChild(textmessage);
+    send_container.append(message);
+}

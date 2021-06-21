@@ -27,6 +27,8 @@ var connection = sql.createConnection(configure);
 
 var username = "";
 
+let online_users = [];
+
 connection.connect(function(err) {
     if (err) throw err;
     console.log("Connected to sql database!");
@@ -58,34 +60,150 @@ io.on('connection',socket=>{
             for(const sender of senders){
                 socket.emit("friend-request",sender.sender);
             }
+        });getColumn("friends","friend","user",username).then(friends=>{
+            
+            for(const friend of friends){
+                socket.emit("friend",friend.friend);
+            }
         });
     });
 
     //Friend request
     socket.on('friend-name',data=>{
         let friendship = friend_request_parser(data);
-        
-        insertIntoTable("INSERT INTO pending_friends VALUES (?,?)",friendship);
-
-        foundInTable("online_users","username",friendship[1]).then(response=>{
+        let isfriendrequested = true;
+        let isfriendrequestedBackwards = true;
+        let isfriend = true;
+        getColumn('pending_friends',"sender","receiver",friendship[1]).then(senders=>{
             
-            if(response){
-                getColumn("online_users","session_id","username",friendship[1]).then(id =>{
-                    console.log(id[0].session_id);
-                    io.sockets.emit("direct-friend-request","hello");
-
-                });
-
+    
+            if(senders.length == 0){
+                isfriendrequested = false;
             }
+            else{
+
+                for(let sender of senders){
+                
+                    if(sender.sender == friendship[0]){
+                        isfriendrequested = true;
+                        //should read from client side and send it to message notification.
+                        socket.emit("already-requested","You have already sent a friend request to this user");
+                    }
+                    else{
+                        console.log('entered else');
+                        isfriendrequested = false;
+                    }
+                }
+            }
+            
         });
+        getColumn('pending_friends',"sender","receiver",friendship[0]).then(senders=>{
+            
+    
+            if(senders.length == 0){
+                isfriendrequestedBackwards = false;
+            }
+            else{
+
+                for(let sender of senders){
+                
+                    if(sender.sender == friendship[1]){
+                        isfriendrequestedBackwards = true;
+                        //should read from client side and send it to message notification.
+                        socket.emit("already-requested","You have already sent a friend request to this user");
+                    }
+                    else{
+                        console.log('entered else');
+                        isfriendrequestedBackwards = false;
+                    }
+                }
+            }
+            
+        });
+        getColumn("friends","user","friend",friendship[1]).then(users=>{
+            
+            if(users.length == 0){
+                isfriend = false;
+            }
+            else{
+                for(let user of users){
+                    if(user.user == friendship[0]){
+                        isfriend = true;
+                        //should read from client side and send it to message notification.
+                        socket.emit("already-requested","You are already friend with this user");
+                    }
+                    else
+                        isfriend = false;
+                }
+            }
+
+            if(!isfriend && !isfriendrequested && !isfriendrequestedBackwards){
+    
+                insertIntoTable("INSERT INTO pending_friends VALUES (?,?)",friendship);        
+                checkValue(friendship[1],friendship[0],"direct-friend-request");
+    
+            }
+            
+        });
+
+
+    });
+
+
+    //message handling
+
+    socket.on("message-to-user",data=>{
+        let messageInfo =  friend_request_parser(data);
+        messageInfo.push(Date.now());
+        insertIntoTable("INSERT INTO messages VALUES (?,?,?,?)",messageInfo);
+        
     });
 
     socket.on('disconnect',()=>{
-        deleteFromTable("online_users","session_id",socket.id);
+        //deleteFromTable("online_users","session_id",socket.id);
+        for(let user of online_users){
+            if(user.id == socket.id){
+                online_users = removeFromArray(online_users,user);
+            }
+        }
+        
     });
 
     
+    socket.on("accepted-friend-request",data =>{
+        let friends = friend_request_parser(data);
+        
+        let friends_inverted =[friends[1],friends[0]]; 
+
+        insertIntoTable("INSERT INTO friends VALUES (?,?)",friends);
+        insertIntoTable("INSERT INTO friends VALUES (?,?)",friends_inverted);
+
+        checkValue(friends[1],friends[0],"accepted-friend");
+
+        deleteFromTable("pending_friends","receiver",friends[0]);
+        
+    });
 });
+
+function checkValue(value,secondvalue,message){
+    return new Promise((resolve,reject) =>{
+
+        for(let user of online_users){
+            if(user.username == value){
+                io.to(user.id).emit(message,secondvalue);
+                resolve();
+            }
+        }
+    })
+}
+
+
+function removeFromArray(arr, value) { 
+    
+    return arr.filter(function(ele){ 
+        return ele != value; 
+    });
+}
 
 
 
@@ -173,7 +291,12 @@ function handleSignin(socket){
                         "Welcome"
                     });
                     socket.emit('socket-id',socket.id);
-                    insertIntoTable("INSERT INTO online_users VALUES (?,?)",[username,socket.id]);
+                    //insertIntoTable("INSERT INTO online_users VALUES (?,?)",[username,socket.id]);
+                    let user = {
+                        username,
+                        id: socket.id
+                    }
+                    online_users.push(user);
                     resolve(username);
                 }).catch(error =>{
                     socket.emit("signin-answer",{message:
