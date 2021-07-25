@@ -27,7 +27,8 @@ app.on('ready', function(){
         webPreferences:{ 
             enableRemoteModule: true ,
             webSecurity:false,
-            nodeIntegration: true
+            nodeIntegration: true,
+            contextIsolation: false
         }, 
         resizable:false
     });
@@ -61,6 +62,9 @@ app.on('ready', function(){
         mainWindow.webContents.send("message-to-user",username + "," + arg);
     });
     
+    ipcMain.on("chatOpened",(_event,arg)=>{
+        mainWindow.webContents.send('chatOpened',username + "," + arg);
+    });
 });
 
 

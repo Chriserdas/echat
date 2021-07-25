@@ -7,9 +7,7 @@ const socketio = require('socket.io');
 var sql = require('mysql');
 let configure = require("./config.js");
 
-
-
-
+let chatOpened = new Map();
 
 const app = express();
 const server = http.createServer(app);
@@ -156,14 +154,39 @@ io.on('connection',socket=>{
         let messageInfo =  friend_request_parser(data);
         messageInfo.push(Date.now());
         insertIntoTable("INSERT INTO messages VALUES (?,?,?,?)",messageInfo);
+
+        if(chatOpened.has(messageInfo[1]) && chatOpened.get(messageInfo[1]) === messageInfo[0]){
+            checkValue(messageInfo[1],{message:messageInfo[2],date:Date.now()},"direct-message");
+        }
         
     });
+
+    socket.on("chatOpened",data =>{
+        let userInfo = friend_request_parser(data);
+        
+        chatOpened.set(userInfo[0],userInfo[1]);
+        
+        let statement = "SELECT * from messages Where (sender = ? AND receiver = ? ) OR sender = ? AND receiver = ?";
+        connection.query(statement,[userInfo[0],userInfo[1],userInfo[1],userInfo[0]], (err, result, fields) => {
+            
+            for(let i of result){
+                if(i.receiver == userInfo[0].toString()){
+                    i.message = " " + i.message;       
+                }
+                socket.emit("message",{message:i.message, date:i.datetime});
+            }
+        });
+
+    });
+
+
 
     socket.on('disconnect',()=>{
         //deleteFromTable("online_users","session_id",socket.id);
         for(let user of online_users){
             if(user.id == socket.id){
                 online_users = removeFromArray(online_users,user);
+                chatOpened.delete(user.username);
             }
         }
         
@@ -280,6 +303,7 @@ function deleteFromTable(table_name,fieldToSearch,itemToDelete){
     
 }
 
+
 function handleSignin(socket){
     
     return new Promise((resolve,reject) =>{
@@ -325,6 +349,7 @@ function getColumn(table_name,selectable1,selectable2,name) {
         });
     });
 }
+
 
 function validateUser(name,password){
     let statement = "SELECT password FROM usernames_passwords_emails WHERE username = ?"

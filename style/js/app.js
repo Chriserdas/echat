@@ -66,6 +66,12 @@ let isMuted = false;
 let isSoundMuted = false;
 let notHit = false;
 
+/*---------chat opened--------------*/
+
+let chatOpened;
+
+/*----------------------------------*/  
+
 const appWindow = Window.getCurrentWindow();
 let friend_divs = [];
 
@@ -85,9 +91,19 @@ ipcRenderer.on("friend",(event,arg)=>{
 });
 
 
-ipcRenderer.on('accepted-friend',(event,arg)=>{
+ipcRenderer.on('accepted-friend',(_event,arg)=>{
     createFriendIcon(arg.toString());
 });
+
+ipcRenderer.on("direct-message",(_event,arg)=>{
+
+    createGottenMessage(arg.message);
+});
+
+ipcRenderer.on("sent-message",(_event,arg)=>{
+    createMessage(arg.message);
+});
+
 
 appWindow.on("close",()=>{
     app.quit();
@@ -411,14 +427,21 @@ function createFriendIcon(friendname){
         document.querySelector("#friend-nickname").innerHTML = friendname;
         document.querySelector(".no-conversation").style.display = "none";
         sendMessage.value = "";
+
+        if(chatOpened != friendname){
+            chatOpened = friendname;
+            ipcRenderer.send("chatOpened",chatOpened);
+            document.querySelector(".display-chat-area").innerHTML = "";
+        }
+        
     });
 
     friendIcon.addEventListener('mouseenter',()=>{
-        friendlabel.style.display = "block";
+        friendlabel.style.opacity = "1";
     });
 
     friendIcon.addEventListener('mouseleave',()=>{
-        friendlabel.style.display = "none";
+        friendlabel.style.opacity = "0";
     });
 
 
@@ -448,4 +471,22 @@ function createMessage(element) {
 
     message.appendChild(textmessage);
     send_container.append(message);
+    document.querySelector(".display-chat-area").scrollTop = document.querySelector(".display-chat-area").scrollHeight;
+}
+
+function createGottenMessage(message) {
+
+    let get_container = document.createElement("div");
+    get_container.className = "get-container";
+    document.querySelector(".display-chat-area").append(get_container);
+
+    
+    let got_message = document.createElement("div");
+    let textmessage = document.createTextNode(message);
+    got_message.className = "got-message";
+
+    got_message.appendChild(textmessage);
+    get_container.append(got_message);
+
+    document.querySelector(".display-chat-area").scrollTop = document.querySelector(".display-chat-area").scrollHeight
 }

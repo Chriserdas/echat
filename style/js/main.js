@@ -246,6 +246,7 @@ function serverOpinion(){
                 webPreferences:{ 
                     enableRemoteModule: true,
                     nodeIntegration: true,
+                    contextIsolation: false
                 }
 
             });
@@ -276,6 +277,20 @@ function serverOpinion(){
 
             socket.on("accepted-friend",friendname=>{
                 win.webContents.send("accepted-friend",friendname);
+            });
+
+            socket.on("direct-message",message=>{
+                win.webContents.send("direct-message",message);
+            });
+
+            socket.on("message",message =>{
+                if(message.message.charAt(0) == " "){
+                    message.message = message.message.substring(1)
+                    win.webContents.send("direct-message",message);
+                }
+                else{
+                    win.webContents.send("sent-message",message);
+                }
             });
         }
     });
@@ -313,8 +328,12 @@ function handleApp() {
         });
     });
 
-    ipc.on("message-to-user",(event,arg)=>{
+    ipc.on("message-to-user",(_event,arg)=>{
         socket.emit("message-to-user",arg);
     });
+
+    ipc.on('chatOpened',(_event,arg) =>{
+        socket.emit("chatOpened",arg);
+    })
     
 }

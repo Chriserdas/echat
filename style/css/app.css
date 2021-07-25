@@ -617,7 +617,7 @@ img:hover {
     font-size:20px;
     color:white;
     font-family: 'Oswald', sans-serif;
-    margin-top:10px;
+    margin-top:-15px;
     background-color: #3F826D;
     transition: 0.4s;
 }
@@ -641,7 +641,8 @@ img:hover {
     z-index:1;
     color:white;
     font-family: 'Oswald', sans-serif;
-    display:none;
+    opacity: 0;
+    transition:0.2s;
 }
 
 /*--------------no conversation--------------*/
@@ -681,6 +682,26 @@ img:hover {
     
 }
 
+.get-container{
+    position : relative;
+    left:0%;
+    max-width:50%;
+    display:flex;
+    background-color:transparent;
+    justify-content:flex-start;
+}
+
+.got-message{
+    position:relative;
+    border:0px solid black;
+    border-radius:10px;
+    margin:3px;
+    padding:7px;
+    background-color:#333333;
+    color:white;
+    margin-right:13px;
+}
+
 .message{
     position:relative;
     border:0px solid black;
@@ -707,23 +728,23 @@ img:hover {
     user-select:text;
 }
 
-::-webkit-scrollbar{
+div.display-chat-area::-webkit-scrollbar{
     width:10px;
 }
 
-::-webkit-scrollbar-track {
+div.display-chat-area::-webkit-scrollbar-track {
     border-radius:50px;
     background: #424242;
 
 }
 
-::-webkit-scrollbar-thumb {
+div.display-chat-area::-webkit-scrollbar-thumb {
     border-radius:50px;
     background-color: #272727;
     min-height:10px;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: #1b1b1b;
+div.display-chat-area::-webkit-scrollbar-thumb:hover {
+    background: #1b1b1b;
 }
 /*-----------------------------------------*/
