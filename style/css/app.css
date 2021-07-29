@@ -700,6 +700,7 @@ img:hover {
     background-color:#333333;
     color:white;
     margin-right:13px;
+    font-family: 'Open Sans', sans-serif;
 }
 
 .message{
@@ -711,6 +712,7 @@ img:hover {
     background-color:#292929;
     color:white;
     margin-right:13px;
+    font-family: 'Open Sans', sans-serif;
 }
 
 .display-chat-area{

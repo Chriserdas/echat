@@ -134,7 +134,7 @@ signinButton.addEventListener('click',e=>{
         animate(signinNotification);
     }
     else{
-        socket = io.connect('http://localhost:3000');
+        socket = io.connect('https://echat-electron.herokuapp.com/');
         
         emitSigninData();
         serverOpinion();
@@ -160,7 +160,7 @@ function validateEmail(emailValue){
         invalidEmail.style.display = "none";
         email.style.borderRight = "0px";
         
-        socket = io.connect('http://localhost:3000');
+        socket = io.connect('https://echat-electron.herokuapp.com/');
         emitData();
     }
     else{
@@ -260,38 +260,40 @@ function serverOpinion(){
 
             sendUsername().then();
             sendSessionId().then(()=>{
-                currentWindow.hide();
+                forceHide().then(()=>{
+                    handleApp();
+
+                    socket.on("direct-friend-request",data =>{
+                        win.webContents.send("friend",data);
+                    });
+
+                    ipc.on("accepted-friend-request",(event,arg)=>{
+                        socket.emit("accepted-friend-request",arg);
+                    });
+
+                    socket.on("accepted-friend",friendname=>{
+                        win.webContents.send("accepted-friend",friendname);
+                    });
+
+                    socket.on("direct-message",message=>{
+                        win.webContents.send("direct-message",message);
+                    });
+
+                    socket.on("message",message =>{
+                        if(message.message.charAt(0) == " "){
+                            message.message = message.message.substring(1)
+                            win.webContents.send("direct-message",message);
+                        }
+                        else{
+                            win.webContents.send("sent-message",message);
+                        }
+                    });
+                });
                 signinUsername.value = "";
                 signinPassword.value = "";
                 
             });            
-            handleApp();
-
-            socket.on("direct-friend-request",data =>{
-                win.webContents.send("friend",data);
-            });
-
-            ipc.on("accepted-friend-request",(event,arg)=>{
-                socket.emit("accepted-friend-request",arg);
-            });
-
-            socket.on("accepted-friend",friendname=>{
-                win.webContents.send("accepted-friend",friendname);
-            });
-
-            socket.on("direct-message",message=>{
-                win.webContents.send("direct-message",message);
-            });
-
-            socket.on("message",message =>{
-                if(message.message.charAt(0) == " "){
-                    message.message = message.message.substring(1)
-                    win.webContents.send("direct-message",message);
-                }
-                else{
-                    win.webContents.send("sent-message",message);
-                }
-            });
+            
         }
     });
     
@@ -336,4 +338,11 @@ function handleApp() {
         socket.emit("chatOpened",arg);
     })
     
+}
+
+function forceHide() {
+    return new Promise((resolve,reject)=>{
+        currentWindow.hide();
+        resolve();
+    })
 }

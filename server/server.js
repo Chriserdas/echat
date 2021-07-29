@@ -13,12 +13,11 @@ const app = express();
 const server = http.createServer(app);
 const io = socketio(server);
 
-const PORT = 3000 || process.env.PORT;
 
 
-server.listen(PORT,()=>{
-    console.log(`Server running on port: ${PORT}`);
-});
+server.listen(process.env.PORT || 5000);
+
+
 
 
 var connection = sql.createConnection(configure);
@@ -28,9 +27,10 @@ var username = "";
 let online_users = [];
 
 connection.connect(function(err) {
-    if (err) throw err;
+    if (err) connection = sql.createConnection(configure);
     console.log("Connected to sql database!");
 });
+
 
 
 
@@ -308,9 +308,9 @@ function handleSignin(socket){
     
     return new Promise((resolve,reject) =>{
         getData(socket,'signinUsername').then(username=>{
-            
             getData(socket,'signinPassword').then(pass=>{
-                validateUser(username.value,pass).then(()=>{
+                
+                validateUser(username,pass).then(()=>{
                     socket.emit("signin-answer",{message:
                         "Welcome"
                     });
@@ -352,18 +352,22 @@ function getColumn(table_name,selectable1,selectable2,name) {
 
 
 function validateUser(name,password){
-    let statement = "SELECT password FROM usernames_passwords_emails WHERE username = ?"
+    let statement = "SELECT password FROM usernames_passwords_emails WHERE username = ?";
     
     return new Promise((resolve,reject) =>{
-        connection.query(statement, name, (err,result,fields) =>{
+        
 
-            if(result == password.value){
+        connection.query(statement, [name], (err,result,fields) =>{
+            console.log(result[0].password);
+            if(result[0].password == password){
                 resolve();
             }
             else{
                 reject();
             }
+
         });
+       
     });
 }
 
