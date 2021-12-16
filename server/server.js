@@ -13,12 +13,7 @@ const app = express();
 const server = http.createServer(app);
 const io = socketio(server);
 
-
-
 server.listen(process.env.PORT || 5000);
-
-
-
 
 var connection = sql.createConnection(configure);
 
@@ -61,6 +56,7 @@ io.on('connection',socket=>{
         });getColumn("friends","friend","user",username).then(friends=>{
             
             for(const friend of friends){
+                console.log("sent friends");
                 socket.emit("friend",friend.friend);
             }
         });
@@ -69,37 +65,33 @@ io.on('connection',socket=>{
     //Friend request
     socket.on('friend-name',data=>{
         let friendship = friend_request_parser(data);
-        let isfriendrequested = true;
-        let isfriendrequestedBackwards = true;
-        let isfriend = true;
+        
         getColumn('pending_friends',"sender","receiver",friendship[1]).then(senders=>{
             
-    
+            
             if(senders.length == 0){
-                isfriendrequested = false;
+                validatePending(socket,friendship[0],friendship[1],friendship);
             }
             else{
 
                 for(let sender of senders){
                 
                     if(sender.sender == friendship[0]){
-                        isfriendrequested = true;
                         //should read from client side and send it to message notification.
                         socket.emit("already-requested","You have already sent a friend request to this user");
                     }
                     else{
-                        console.log('entered else');
-                        isfriendrequested = false;
+                        validatePending(socket,friendship[0],firendship[1],friendship);
                     }
                 }
             }
             
         });
-        getColumn('pending_friends',"sender","receiver",friendship[0]).then(senders=>{
+        /*getColumn('pending_friends',"sender","receiver",friendship[0]).then(senders=>{
             
     
             if(senders.length == 0){
-                isfriendrequestedBackwards = false;
+                validateFriend(socket,friendship[0],firendship[1]);
             }
             else{
 
@@ -111,14 +103,13 @@ io.on('connection',socket=>{
                         socket.emit("already-requested","You have already sent a friend request to this user");
                     }
                     else{
-                        console.log('entered else');
-                        isfriendrequestedBackwards = false;
+                        validateFriend(socket,friendship[0],firendship[1]);
                     }
                 }
             }
             
-        });
-        getColumn("friends","user","friend",friendship[1]).then(users=>{
+        });*/
+        /*getColumn("friends","user","friend",friendship[1]).then(users=>{
             
             if(users.length == 0){
                 isfriend = false;
@@ -136,13 +127,12 @@ io.on('connection',socket=>{
             }
 
             if(!isfriend && !isfriendrequested && !isfriendrequestedBackwards){
-    
                 insertIntoTable("INSERT INTO pending_friends VALUES (?,?)",friendship);        
                 checkValue(friendship[1],friendship[0],"direct-friend-request");
-    
+                socket.emit("already-requested","Friend request sent to user" + friendship[1]);
             }
             
-        });
+        });*/
 
 
     });
@@ -206,6 +196,8 @@ io.on('connection',socket=>{
         deleteFromTable("pending_friends","receiver",friends[0]);
         
     });
+
+    
 });
 
 function checkValue(value,secondvalue,message){
@@ -374,6 +366,58 @@ function validateUser(name,password){
 
 function friend_request_parser(str){
     return str.split(',');
+}
+
+
+function validateFriend(socket,user,friend,array) {
+    getColumn("friends","user","friend",friend).then(users=>{
+        
+        console.log(users);
+        if(users.length == 0){
+            insertIntoTable("INSERT INTO pending_friends VALUES (?,?)",array);        
+            checkValue(friend,user,"direct-friend-request");
+            socket.emit("already-requested","Friend request sent to user " + friend);
+        }
+        else{
+            for(let user of users){
+                if(user.user == user){
+                    //should read from client side and send it to message notification.
+                    socket.emit("already-requested","You are already friend with this user");
+                }
+                else{
+                    insertIntoTable("INSERT INTO pending_friends VALUES (?,?)",array);        
+                    checkValue(friend,user,"direct-friend-request");
+                    socket.emit("already-requested","Friend request sent to user " + friend);
+                }
+            }
+        }
+    });
+}
+
+
+function validatePending(socket,user,friend,array) {
+    getColumn('pending_friends',"sender","receiver",user).then(senders=>{
+            
+    
+        if(senders.length == 0){
+            validateFriend(socket,user,friend,array);
+        }
+        else{
+
+            for(let sender of senders){
+            
+                if(sender.sender == friend){
+                    isfriendrequestedBackwards = true;
+                    //should read from client side and send it to message notification.
+                    socket.emit("already-requested","You have already sent a friend request to this user");
+                }
+                else{
+                    validateFriend(socket,user,friend,array);
+                }
+            }
+        }
+        
+    });
 }
 
 

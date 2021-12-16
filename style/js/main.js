@@ -134,6 +134,7 @@ signinButton.addEventListener('click',e=>{
         animate(signinNotification);
     }
     else{
+        
         socket = io.connect('https://echat-electron.herokuapp.com/');
         
         emitSigninData();
@@ -288,6 +289,10 @@ function serverOpinion(){
                             win.webContents.send("sent-message",message);
                         }
                     });
+
+                    socket.on("already-requested",data=>{
+                        win.webContents.send("notification",data);
+                    });
                 });
                 signinUsername.value = "";
                 signinPassword.value = "";
@@ -337,6 +342,7 @@ function handleApp() {
     ipc.on('chatOpened',(_event,arg) =>{
         socket.emit("chatOpened",arg);
     })
+
     
 }
 
@@ -346,3 +352,4 @@ function forceHide() {
         resolve();
     })
 }
+

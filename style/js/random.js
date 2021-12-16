@@ -65,6 +65,10 @@ app.on('ready', function(){
     ipcMain.on("chatOpened",(_event,arg)=>{
         mainWindow.webContents.send('chatOpened',username + "," + arg);
     });
+
+    ipcMain.on("call",(_event,arg)=>{
+        mainWindow.webContents.send('call',username + "," + arg);
+    });
 });
 
 

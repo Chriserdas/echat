@@ -18,7 +18,7 @@
     "node": "^16.5.0",
     "nodemod": "^2.6.1",
     "socket.io": "^3.0.3",
-    "socket.io-client": "^4.1.3"
+    "socket.io-client": "^4.2.0"
   },
   "devDependencies": {
     "electron": "^13.1.7",
@@ -31,9 +31,9 @@
     "productName": "echat",
     "win": {},
     "target": "NSIS",
-    "nsis":{
+    "nsis": {
       "allowToChangeInstallationDirectory": true,
-      "oneClick":false
+      "oneClick": false
     }
   }
 }

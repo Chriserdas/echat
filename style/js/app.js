@@ -1,9 +1,14 @@
+
+
 const Window = require('electron').remote;
 
-const {ipcRenderer} = require('electron');
+const {ipcRenderer,desktopCapturer} = require('electron');
 
 const app = require('electron').remote.app;
 
+var peer = new Peer({
+    secure: true
+});
 
 const close = document.getElementById('close-button');
 const maximize = document.getElementById('maximize-button');
@@ -24,7 +29,7 @@ let friendSettings = document.querySelector("#friend-settings");
 let mute = document.querySelector("#mute");
 let muteSound = document.getElementById("mute-sound");
 let username = document.getElementById("username");
-
+const call = document.querySelector("#call-image");
 
 
 /*----------------add-Friend-search-------------*/
@@ -47,9 +52,7 @@ const acc_settings = document.querySelector("#settings");
 const notification = document.querySelector(".notification");
 const notification_button = document.querySelector("#notification");
 
-/*let friend_request = document.querySelector(".friend-requests-content");
-let accept_friend_request = document.querySelector("#check-notification");
-let decline_friend_request = document.querySelector("#x-notification");*/
+
 let friend_requests = document.querySelector("#friend-requests");
 let messages = document.querySelector("#messages");
 
@@ -93,6 +96,7 @@ ipcRenderer.on("friend",(event,arg)=>{
 
 ipcRenderer.on('accepted-friend',(_event,arg)=>{
     createFriendIcon(arg.toString());
+    console.log(arg);
 });
 
 ipcRenderer.on("direct-message",(_event,arg)=>{
@@ -102,6 +106,11 @@ ipcRenderer.on("direct-message",(_event,arg)=>{
 
 ipcRenderer.on("sent-message",(_event,arg)=>{
     createMessage(arg.message);
+});
+
+
+ipcRenderer.on("notification",(_event,arg)=>{
+    console.log(arg);
 });
 
 
@@ -409,7 +418,7 @@ function removeFromArray(arr, value) {
 }
 
 
-function createFriendIcon(friendname){
+async function createFriendIcon(friendname){
     let friendIcon = document.createElement("div");
     friendIcon.className = "friend-icon"
     let name = document.createTextNode(getFirstChar(friendname));
@@ -490,3 +499,72 @@ function createGottenMessage(message) {
 
     document.querySelector(".display-chat-area").scrollTop = document.querySelector(".display-chat-area").scrollHeight
 }
+
+
+/* screen share
+desktopCapturer.getSources({ types: ['window', 'screen'] }).then(async sources => {
+        
+    try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+            audio: false,
+            video: {
+            mandatory: {
+                chromeMediaSource: 'desktop',
+                minWidth: 1280,
+                maxWidth: 1280,
+                minHeight: 720,
+                maxHeight: 720
+            }
+            }
+        })
+        handleStream(stream)
+    } catch (e) {
+    handleError(e)
+    }
+    return
+      
+});
+
+function handleStream (stream) {
+    const video = document.querySelector('#screen-player')
+    video.srcObject = stream
+    video.onloadedmetadata = (e) => video.play()
+}
+  
+function handleError (e) {
+    console.log(e)
+}*/
+
+
+call.addEventListener('click', () =>{
+     
+    ipcRenderer.send("call",chatOpened);
+
+
+    var getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+    getUserMedia({video: false, audio: true}, function(stream) {
+        var call = peer.call('another-peers-id', stream);//request from server the id of peer
+        call.on('stream', function(remoteStream) {
+            // Show stream in some video/canvas element.
+        });
+    },function(err) {
+        console.log('Failed to get local stream' ,err);
+    });
+    /*var conn = peer.connect();
+
+    console.log(conn.connectionId);
+    conn.on('open', function(){
+       
+        conn.send('hi!');
+    });*/
+});
+
+
+peer.on('connection', function(conn) {
+    conn.on('data', function(data){
+      // Will print 'hi!'
+      console.log(data);
+    });
+});
+
+  
